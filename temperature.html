@@ -1,0 +1,29 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 是怎么说话的？温度小实验</title>
+<style>body{font-family:-apple-system,"PingFang SC","Noto Sans CJK SC",sans-serif;background:#faf7f0;color:#1e1e28;margin:0;padding:20px;max-width:520px;margin:auto}
+h1{font-size:24px}.ctx{font-size:22px;background:#fff;border-radius:12px;padding:14px;min-height:40px}.ctx b{color:#ff5252}
+.row{display:flex;align-items:center;margin:8px 0}.w{width:60px;font-weight:bold}.bar{height:26px;background:#466ee6;border-radius:6px;transition:width .3s}.p{margin-left:8px;width:56px}
+button{font-size:17px;padding:10px 16px;border:0;border-radius:10px;background:#ff5252;color:#fff;margin:6px 6px 0 0}button.g{background:#1e1e28}
+.note{color:#6e6e78;font-size:13px;margin-top:16px}</style></head><body>
+<h1>AI 是怎么“说话”的？</h1>
+<p>AI 每次只猜下一个词。拖动“温度”，看看候选词的概率怎么变，再点“生成下一个词”。</p>
+<div class="ctx" id="ctx"></div>
+<div id="bars"></div>
+<p>温度：<input type="range" id="t" min="0.1" max="2" step="0.1" value="1"> <span id="tv">1.0</span></p>
+<button id="go">生成下一个词</button><button class="g" id="reset">重来</button>
+<p class="note">说明：候选词和分数是为演示编的示意数据；真实模型的词表有几万到十几万个 token，原理相同：分数经过“除以温度再做 softmax”变成概率，然后按概率抽一个。</p>
+<script>
+const tree={"今天天气真":[["好",3.0],["不错",1.9],["热",1.1],["冷",0.5],["糟糕",-0.2]],
+"好":[["！",2.5],["，",1.8],["啊",1.2],["呀",0.6]],"不错":[["！",2.2],["，",1.9],["呢",0.8]],
+"热":[["！",2.0],["，",1.7],["啊",1.0]],"冷":[["，",2.1],["！",1.6],["啊",0.9]],"糟糕":[["。",2.0],["！",1.5]],
+"，":[["适合出门",2.0],["想睡觉",1.4],["去喝咖啡吧",1.0]]};
+let words=[],key="今天天气真";
+const $=id=>document.getElementById(id);
+function probs(c,T){const e=c.map(x=>Math.exp(x[1]/T)),s=e.reduce((a,b)=>a+b);return c.map((x,i)=>[x[0],e[i]/s]);}
+function draw(){$("ctx").innerHTML="今天天气真<b>"+words.join("")+"</b>";const c=tree[key];const T=+$("t").value;$("tv").textContent=T.toFixed(1);
+if(!c){$("bars").innerHTML="<p>（这句话演示到这里结束啦，点“重来”）</p>";return}
+$("bars").innerHTML=probs(c,T).map(([w,p])=>`<div class="row"><span class="w">${w}</span><div class="bar" style="width:${Math.round(p*300)}px"></div><span class="p">${(p*100).toFixed(0)}%</span></div>`).join("");}
+$("t").oninput=draw;
+$("go").onclick=()=>{const c=tree[key];if(!c)return;let r=Math.random();for(const [w,p] of probs(c,+$("t").value)){if((r-=p)<=0){words.push(w);key=w;break}}if(r>0){const w=c[0][0];words.push(w);key=w}draw()};
+$("reset").onclick=()=>{words=[];key="今天天气真";draw()};draw();
+</script></body></html>
