@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 视频翻译配音是怎么做的？语音识别、翻译、语音合成互动小实验 | AI替我说</title>
+<meta name="description" content="AI 视频翻译配音是先分离人声，再用语音识别把话转成带时间轴的文字，翻译后用语音合成读出来并对齐时长的一条流水线。动手走一遍流程，看噪音和语速怎么影响结果。">
+<meta name="author" content="AI替我说">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"AI 视频翻译配音是怎么做的？","author":{"@type":"Person","name":"AI替我说"},"datePublished":"2026-10-25","inLanguage":"zh-CN","about":"AI video dubbing: speech recognition, machine translation, text-to-speech"}
+</script>
+<style>
+:root{--bg:#FFF8E1;--ink:#2B2A26;--acc:#B88600;--mus:#F0B400;--light:#F5D565;--pale:#FCEFC2;--sub:#857D66;--blue:#2747C9;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:28px;margin:6px 0 4px;line-height:1.35}
+h2{font-size:21px;margin:30px 0 10px;color:var(--acc)}
+.meta{color:var(--sub);font-size:14px}
+.def{background:var(--mus);color:var(--ink);border-radius:16px;padding:16px 18px;font-size:17px;font-weight:600;margin:16px 0}
+.card{background:#fff;border-radius:16px;padding:16px 18px;margin:12px 0;box-shadow:0 1px 0 var(--pale)}
+.ctrl{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:8px 0}
+.ctrl label{display:flex;gap:8px;align-items:center;cursor:pointer}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+input[type=range]{accent-color:var(--acc);width:200px}
+button{background:var(--ink);color:var(--mus);border:0;border-radius:999px;padding:9px 18px;font-size:15px;font-weight:700;cursor:pointer}
+button.alt{background:var(--pale);color:var(--ink)}
+.steps{display:grid;gap:10px}
+.step{background:#fff;border-radius:14px;padding:12px 14px;border-left:8px solid var(--light);opacity:.35;transition:.3s}
+.step.on{opacity:1;border-left-color:var(--mus)}
+.step b{color:var(--acc)}
+.seg{margin:6px 0;font-size:15px}
+.ts{display:inline-block;background:var(--pale);border-radius:6px;padding:0 6px;font-family:ui-monospace,Menlo,monospace;font-size:13px;margin-right:6px}
+.err{background:#FFE1DC;color:#9B2B1A;border-radius:4px;padding:0 3px}
+.bar{position:relative;height:26px;background:var(--pale);border-radius:8px;margin:4px 0 10px;overflow:hidden}
+.bar .slot{position:absolute;top:0;bottom:0;border-right:3px dashed var(--ink)}
+.bar .fill{position:absolute;top:0;bottom:0;left:0;border-radius:8px;background:var(--mus);transition:.3s}
+.bar .fill.over{background:var(--blue)}
+.small{font-size:13px;color:var(--sub)}
+.tag{display:inline-block;font-size:12px;border-radius:999px;padding:0 8px;margin-left:6px;background:var(--pale)}
+.tag.over{background:var(--blue);color:#fff}
+footer{margin-top:36px;color:var(--sub);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="meta">作者：AI替我说 · 2026-10-25</p>
+<h1>AI 视频翻译配音是怎么做的？</h1>
+<p class="def">AI 视频翻译配音是一条流水线：先把原话识别成带时间轴的文字，翻译后再用语音合成读出来，并对齐每句时长。</p>
+
+<h2>动手试试：给一段英文视频配中文</h2>
+<div class="card">
+<p class="small">下面是一段虚构的 3 句英文旁白，时间和语速都是示意数据。勾选或拖动选项，再点「走一遍流程」。</p>
+<div class="ctrl">
+<label><input type="checkbox" id="noise"> 原视频背景很吵</label>
+<label><input type="checkbox" id="short"> 译文改短一点</label>
+</div>
+<div class="ctrl">
+<span>AI 朗读语速：</span><input type="range" id="rate" min="3" max="7" step="0.5" value="4"><span id="rateV"></span>
+</div>
+<div class="ctrl"><button id="run">走一遍流程</button><button class="alt" id="speak">用浏览器读出中文配音</button></div>
+</div>
+
+<div class="steps">
+<div class="step" id="s1"><b>1 分离人声</b><div id="o1" class="small">等待中……</div></div>
+<div class="step" id="s2"><b>2 语音识别（声音 → 带时间轴的文字）</b><div id="o2"></div></div>
+<div class="step" id="s3"><b>3 机器翻译（按整句翻）</b><div id="o3"></div></div>
+<div class="step" id="s4"><b>4 语音合成 + 对齐时长</b><div id="o4"></div><div class="small">虚线是原句占的时间；色条是中文读出来大约要的时间（字数 ÷ 语速，示意）。超出虚线就得调语速或改短译文。</div></div>
+</div>
+
+<h2>四个步骤分别在做什么</h2>
+<p><b>分离人声：</b>把说话声和背景音乐、音效拆开，这样换掉人声后，背景音还能原样保留。</p>
+<p><b>语音识别：</b>把音频转成文字，同时记下每句话从第几秒开始、到第几秒结束，形成像字幕一样的时间轴。噪音、口音和方言都会让识别出错。</p>
+<p><b>机器翻译：</b>按整句或说话停顿分段后再翻译，逐词硬翻会很别扭。人名、俚语和专业术语最容易翻错。</p>
+<p><b>语音合成：</b>让 AI 把译文读出来。同一句话换一种语言，读出来的长短往往不同，所以要调整语速、改短译文或稍微调整画面停顿来对齐。有些工具还会参照原声的音高和语调来读，让配音更自然。</p>
+
+<h2>为什么会翻车</h2>
+<p>这是一条流水线，前一步的错误会一路传到后面：听错一个词，翻译就跟着错，读出来也是错的。所以看配音视频时，关键信息最好对照原声或字幕；用 AI 复刻某个人的声音，应当先得到本人同意。</p>
+
+<footer>
+<p>本页由 AI 辅助制作（vibe coding），流程原理参考 YouTube 帮助中心关于自动配音的说明和 Google 公开资料；例句、时间和语速均为示意数据，浏览器朗读使用系统自带的语音合成。</p>
+<p>思考一下：当每个视频都能被一键配成你的母语，你还会想听原声吗？</p>
+</footer>
+</div>
+<script>
+const SEG=[
+ {t:[0.0,2.6],en:"Coffee was first brewed in Yemen.",enNoise:"Coffee was first <span class='err'>grown</span> in Yemen.",zh:"咖啡最早是在也门被冲煮饮用的。",zhS:"咖啡最早在也门冲着喝。",zhN:"咖啡最早是在也门<span class='err'>种植</span>的。",zhNS:"咖啡最早在也门<span class='err'>种植</span>。"},
+ {t:[2.6,5.0],en:"It spread across the world by ship.",enNoise:"It spread across the world by <span class='err'>sheep</span>.",zh:"后来它乘着船传遍了全世界。",zhS:"后来坐船传遍世界。",zhN:"后来它<span class='err'>靠羊</span>传遍了全世界。",zhNS:"后来<span class='err'>靠羊</span>传遍世界。"},
+ {t:[5.0,7.2],en:"Today we drink billions of cups.",enNoise:"Today we drink billions of cups.",zh:"如今人们每天要喝掉数不清的咖啡。",zhS:"如今人们喝掉无数杯。",zhN:"如今人们每天要喝掉数不清的咖啡。",zhNS:"如今人们喝掉无数杯。"}
+];
+const $=id=>document.getElementById(id);
+const strip=s=>s.replace(/<[^>]+>/g,"");
+function rateV(){$("rateV").textContent=$("rate").value+" 字/秒";}
+$("rate").oninput=()=>{rateV();if($("s4").classList.contains("on"))render(4);};
+rateV();
+function zhOf(s){const n=$("noise").checked,sh=$("short").checked;return n?(sh?s.zhNS:s.zhN):(sh?s.zhS:s.zh);}
+function render(k){
+ const n=$("noise").checked;
+ if(k>=1)$("o1").innerHTML=n?"人声已分离，但背景很吵，有些词听不清（示意）":"人声和背景音乐已分开（示意）";
+ if(k>=2)$("o2").innerHTML=SEG.map(s=>`<div class="seg"><span class="ts">${s.t[0].toFixed(1)}s–${s.t[1].toFixed(1)}s</span>${n?s.enNoise:s.en}</div>`).join("")+(n?"<div class='small'>标红的是听错的词（示意）</div>":"");
+ if(k>=3)$("o3").innerHTML=SEG.map(s=>`<div class="seg"><span class="ts">${s.t[0].toFixed(1)}s</span>${zhOf(s)}</div>`).join("")+(n?"<div class='small'>第 2 步听错，翻译也跟着错了</div>":"");
+ if(k>=4){const r=+$("rate").value;let over=0;
+  $("o4").innerHTML=SEG.map(s=>{const slot=s.t[1]-s.t[0],len=strip(zhOf(s)).replace(/[，。]/g,"").length,need=len/r,max=Math.max(slot,need)*1.15;const o=need>slot+0.05;if(o)over++;
+  return `<div class="seg">${strip(zhOf(s))}<span class="tag ${o?"over":""}">${o?"超时 "+(need-slot).toFixed(1)+" 秒":"放得下"}</span></div><div class="bar"><div class="fill ${o?"over":""}" style="width:${need/max*100}%"></div><div class="slot" style="width:${slot/max*100}%"></div></div>`}).join("")
+  +`<div class="small">${over?"有 "+over+" 句超时：试试调快语速，或勾选「译文改短一点」。语速太快，听起来会很赶。":"全部对上了！"}</div>`;}
+}
+async function run(){for(let k=1;k<=4;k++){$("s"+k).classList.add("on");render(k);await new Promise(r=>setTimeout(r,500));}}
+$("run").onclick=()=>{["s1","s2","s3","s4"].forEach(i=>$(i).classList.remove("on"));run();};
+$("noise").onchange=$("short").onchange=()=>{if($("s4").classList.contains("on"))render(4);};
+$("speak").onclick=()=>{if(!("speechSynthesis" in window)){alert("这个浏览器不支持语音合成");return;}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(SEG.map(s=>strip(zhOf(s))).join(""));u.lang="zh-CN";u.rate=Math.min(2,+$("rate").value/4);speechSynthesis.speak(u);};
+</script>
+</body>
+</html>

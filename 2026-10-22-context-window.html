@@ -1,0 +1,105 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>上下文窗口是什么？AI 为什么聊着聊着就忘了 · 互动小实验 | AI替我说</title>
+<meta name="description" content="上下文窗口是大模型一次能看到并参考的全部内容上限，用 token 计量。拖动窗口大小，亲手看看 AI 为什么会忘掉开头说过的话。">
+<meta name="author" content="AI替我说">
+<style>
+:root{--bg:#f5f3ff;--ink:#2a1f5c;--acc:#5b3fd9;--lil:#9b7bf2;--pale:#e6e0ff;--sub:#766c96;--grey:#c8c4d6}
+body{font-family:-apple-system,"PingFang SC","Noto Sans CJK SC",sans-serif;background:var(--bg);color:var(--ink);margin:0 auto;padding:20px;max-width:560px;line-height:1.6}
+h1{font-size:24px;margin:6px 0}h2{font-size:19px;margin:18px 0 6px;color:var(--acc)}
+.card{background:#fff;border-radius:14px;padding:14px;margin:12px 0}
+button{font-size:16px;padding:10px 14px;border:0;border-radius:10px;background:var(--acc);color:#fff;margin:6px 6px 0 0;cursor:pointer}
+button.g{background:var(--ink)}button.l{background:var(--lil)}
+input[type=range]{width:62%;accent-color:var(--acc)}
+.msg{padding:7px 10px;border-radius:10px;margin:6px 0;font-size:15px;transition:all .35s}
+.u{background:var(--pale)}.a{background:#f1eefc}.out{background:#eeedf2;color:#a19cb3;text-decoration:line-through}
+.sum{background:#efe9ff;border:1px dashed var(--lil)}
+.tk{float:right;font-size:12px;color:var(--sub)}
+.bar{height:16px;background:#eeedf2;border-radius:8px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.ans{padding:10px;border-radius:10px;background:var(--pale);font-weight:bold;margin-top:8px}
+.pos{display:flex;gap:6px;margin:8px 0}.pos div{flex:1;text-align:center;padding:8px 0;border-radius:8px;background:#eeedf2;font-size:14px}
+.pos div.key{background:var(--acc);color:#fff;font-weight:bold}
+.note{color:var(--sub);font-size:13px}
+article p{margin:8px 0}
+</style></head><body>
+<h1>AI 聊着聊着就忘了？🤔 上下文窗口小实验</h1>
+<p>AI 每次回答，只能看“桌面上”摊开的内容——这张桌子就叫<b>上下文窗口</b>🗂️。拖一拖窗口大小，一句句往下聊，看看最早那句话什么时候被挤出去。</p>
+
+<div class="card"><b>🧪 实验一：窗口装满会怎样</b><br>
+<label>🪟 窗口大小（示意 token）：<input type="range" id="win" min="40" max="200" step="10" value="80"> <b id="wv">80</b></label>
+<label style="display:block;margin-top:6px"><input type="checkbox" id="summ"> 📝 装满时把旧内容压缩成摘要（而不是直接丢掉）</label>
+<div class="bar"><i id="fill" style="width:0"></i></div><div class="note" id="usage">已用 0 / 80</div>
+<div id="chat"></div>
+<button id="next">💬 聊下一句</button><button class="l" id="ask">❓ 问：我对什么过敏？</button><button class="g" id="reset">重来</button>
+<div id="ans"></div>
+</div>
+
+<div class="card"><b>🧪 实验二：关键信息放哪儿最稳</b>
+<p style="margin:6px 0">一大段资料里藏着一句关键信息，选它的位置：</p>
+<div class="pos" id="pos"></div>
+<div class="ans" id="pans">（点上面的格子试试）</div>
+<p class="note">依据：Liu 等人 2023 年论文《Lost in the Middle》发现，关键信息在开头或结尾时模型用得最好，放在中间时效果明显变差（U 形曲线）。这里只做定性示意，不代表任何具体模型的数字。</p>
+</div>
+
+<article class="card">
+<h2>📖 文字说明：什么是上下文窗口？</h2>
+<p><b>上下文窗口是大模型一次能看到并参考的全部内容上限，用 token 计量，提问、聊天记录、文件和回答都算在内。</b></p>
+<p>作者：AI替我说 ｜ 日期：2026-10-22</p>
+<p>🔹 <b>它和“训练知识”不是一回事。</b>训练知识像书架上读过的书；上下文窗口像这一次摊在桌上的材料，相当于 AI 的“工作记忆”。</p>
+<p>🔹 <b>什么会占用窗口？</b>App 预设的系统说明、你和它的每一轮对话、上传的文件和图片、工具返回的结果，以及它正在写的回答。长度按 token（模型切分文字的单位）计算，不同模型的窗口大小差别很大，从几千到上百万 token 都有。</p>
+<p>🔹 <b>装满了怎么办？</b>很多聊天产品会按“先进先出”丢掉最早的内容，或把旧内容压缩成摘要；有的会直接提示内容太长。所以长聊之后，AI 可能“忘了”你开头提的要求。</p>
+<p>🔹 <b>窗口大也不等于记得牢。</b>研究发现，关键信息放在中间时更容易被忽略；内容越多，准确度也可能下降。</p>
+<p>🔹 <b>实用小习惯：</b>换话题就开新对话；重要要求放开头、结尾再重复一次；聊太长先让它总结，再带着总结开新对话；长文件只放相关部分。</p>
+<p>💡 想一想：下次和 AI 聊长内容时，你最想让它记住的那句话，现在放在“桌面”的哪个位置？</p>
+<p class="note">说明：本页是用规则写的模拟演示，不是真的大模型；token 数按“1 个字≈1 token”粗略示意，真实换算因模型和语言而异。原理参考 Anthropic 文档《Context windows》、IBM《What is a context window?》、Liu 等《Lost in the Middle: How Language Models Use Long Contexts》（2023）。本页由 AI 辅助制作。</p>
+</article>
+
+<script>
+const $=id=>document.getElementById(id);
+const script=[
+ ["u","你好！先说一下：我对花生过敏 🥜"],
+ ["a","收到，我会记住你对花生过敏。"],
+ ["u","周末想在家做顿早餐，有什么推荐？"],
+ ["a","可以试试燕麦粥配水果，或者鸡蛋三明治。"],
+ ["u","再来点下午茶甜点的点子吧"],
+ ["a","香蕉松饼、酸奶杯、烤苹果都不错。"],
+ ["u","那晚上想吃点清淡的呢"],
+ ["a","清蒸鱼、番茄豆腐汤，搭一份青菜。"],
+ ["u","最后帮我列个周末零食清单"],
+ ["a","坚果拼盘、薯片、水果干、巧克力。"]
+];
+const tok=s=>[...s.replace(/[\s，。！？：、🥜]/g,"")].length; // 示意：1 字≈1 token
+let n=0;
+function render(){
+ const W=+$("win").value,useSum=$("summ").checked; $("wv").textContent=W;
+ let msgs=script.slice(0,n).map(([r,t],i)=>({r,t,i,k:tok(t),out:false}));
+ let total=msgs.reduce((s,m)=>s+m.k,0),used=total,summary=null;
+ if(total>W){
+  let drop=0,i=0; while(used>W-(useSum?12:0)&&i<msgs.length){used-=msgs[i].k;msgs[i].out=true;i++;drop++;}
+  if(useSum&&drop>0){const has=msgs.slice(0,drop).some(m=>m.i===0);summary={t:has?"摘要：用户对花生过敏；聊过早餐等话题。":"摘要：聊过一些饮食话题。",k:12};used+=12;}
+ }
+ $("fill").style.width=Math.min(100,used/W*100)+"%";
+ $("usage").textContent=`已用 ${used} / ${W}（示意 token）`+(total>W?` · ⚠️ 总共 ${total}，装不下了`:"");
+ let h="";
+ if(summary) h+=`<div class="msg sum">📝 ${summary.t}<span class="tk">${summary.k}</span></div>`;
+ for(const m of msgs) h+=`<div class="msg ${m.out?"out":m.r}">${m.r==="u"?"🙋":"🤖"} ${m.t}<span class="tk">${m.out?"已挤出":m.k}</span></div>`;
+ $("chat").innerHTML=h||'<p class="note">（点“聊下一句”开始）</p>';
+ return {first:msgs.length&&!msgs[0].out, summary};
+}
+$("next").onclick=()=>{if(n<script.length)n++;render();$("ans").innerHTML="";};
+$("win").oninput=()=>{render();$("ans").innerHTML="";};$("summ").onchange=()=>{render();$("ans").innerHTML="";};
+$("ask").onclick=()=>{const s=render();let t;
+ if(n===0) t="🤖 我们还没开始聊呢～";
+ else if(s.first) t="🤖 你对花生过敏，我记着呢 ✅（那句话还在窗口里）";
+ else if(s.summary&&s.summary.t.includes("花生")) t="🤖 根据前面的摘要，你对花生过敏 ✅（摘要保住了关键信息）";
+ else t="🤖 嗯……你之前好像没说过？😅（那句话已经被挤出窗口，它真的“看不到”了）";
+ $("ans").innerHTML=`<div class="ans">${t}</div>`;};
+$("reset").onclick=()=>{n=0;$("win").value=80;$("summ").checked=false;$("ans").innerHTML="";render();};
+render();
+const P=["开头","","","中间","","","结尾"];
+$("pos").innerHTML=P.map((p,i)=>`<div data-i="${i}">${p||"·"}</div>`).join("");
+document.querySelectorAll("#pos div").forEach(d=>d.onclick=()=>{
+ document.querySelectorAll("#pos div").forEach(x=>x.classList.remove("key"));d.classList.add("key");
+ const i=+d.dataset.i,dist=Math.abs(i-3);
+ $("pans").textContent=dist===3?"✅ 放在两头：最容易被注意到":dist===2?"🙂 靠近两头：还算稳":dist===1?"😐 偏中间：有点容易被漏看":"😵 正中间：最容易被忽略";
+});
+</script></body></html>

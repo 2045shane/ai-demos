@@ -1,0 +1,112 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAG 检索增强生成是什么？AI 的「开卷考试」互动小实验 | AI替我说</title>
+<meta name="description" content="RAG（检索增强生成）让大模型先从指定资料库里找出相关段落，再照着资料回答并标出处。切换闭卷/开卷、改一改资料，亲手看看 AI 怎么翻书答题。">
+<meta name="author" content="AI替我说">
+<style>
+:root{--bg:#eef7fd;--ink:#0b3a5b;--acc:#1e9be0;--light:#7ccbf5;--pale:#d8eefb;--sub:#5b7c93;--lem:#ffd23f;--grey:#c4d2dc}
+body{font-family:-apple-system,"PingFang SC","Noto Sans CJK SC",sans-serif;background:var(--bg);color:var(--ink);margin:0 auto;padding:20px;max-width:560px;line-height:1.6}
+h1{font-size:24px;margin:6px 0}h2{font-size:19px;margin:18px 0 6px;color:var(--acc)}
+.card{background:#fff;border-radius:14px;padding:14px;margin:12px 0}
+button{font-size:15px;padding:9px 12px;border:0;border-radius:10px;background:var(--acc);color:#fff;margin:6px 6px 0 0;cursor:pointer}
+button.g{background:var(--ink)}button.l{background:var(--light);color:var(--ink)}button.on{outline:3px solid var(--lem)}
+input[type=text]{width:100%;box-sizing:border-box;font-size:16px;padding:9px;border:2px solid var(--pale);border-radius:10px;margin-top:6px}
+input[type=range]{width:50%;accent-color:var(--acc)}
+.mode{display:flex;gap:8px;margin:8px 0}.mode button{flex:1;margin:0}
+.doc{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;margin:5px 0;font-size:14px;background:#f5fafe;transition:all .3s}
+.doc.hit{background:var(--pale);font-weight:bold}.doc .t{flex:1}.doc .n{color:var(--sub);font-size:12px;width:22px}
+.bar{width:90px;height:10px;background:#e6eef3;border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc);transition:width .4s}
+.doc:not(.hit) .bar i{background:var(--grey)}.sc{width:34px;text-align:right;font-size:12px;color:var(--sub)}
+.prompt{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:#f3f8fb;border:1px dashed var(--light);border-radius:10px;padding:8px;white-space:pre-wrap;margin-top:8px}
+.ans{padding:10px;border-radius:10px;background:var(--pale);font-weight:bold;margin-top:8px}
+.ans.warn{background:#fff6d6}
+.note{color:var(--sub);font-size:13px}
+.step{display:inline-block;background:var(--lem);color:var(--ink);border-radius:6px;padding:0 6px;font-size:12px;font-weight:bold;margin-right:4px}
+article p{margin:8px 0}
+</style></head><body>
+<h1>AI 答题前先翻书？📚 RAG 开卷小实验</h1>
+<p>RAG 就是让 AI 来一场「开卷考试」✍️：先去资料库里翻出相关段落，再照着资料回答。下面是一家虚构的「云朵奶茶店」员工手册，你可以切换闭卷 / 开卷、调整翻几段、甚至改一改资料，看看答案怎么变 👀</p>
+
+<div class="card"><b>🧪 实验一：闭卷 vs 开卷</b>
+<div class="mode"><button id="mClosed" class="g">🙈 闭卷（只凭记忆）</button><button id="mOpen" class="on">📖 开卷（RAG）</button></div>
+<div>挑个问题 👇</div>
+<div id="qs"></div>
+<input type="text" id="q" placeholder="也可以自己输入，比如：大杯有多大？">
+<label style="display:block;margin-top:8px">🔎 每次翻出最相关的 <b id="kv">2</b> 段：<input type="range" id="k" min="1" max="3" value="2"></label>
+<button id="go">🚀 提问</button>
+<div id="out"></div>
+</div>
+
+<div class="card"><b>🧪 实验二：资料一更新，答案马上跟着变</b>
+<p style="margin:6px 0">点下面的按钮，把手册里的营业时间改掉，再回到实验一问「周一能去买奶茶吗？」。开卷的答案会立刻变，闭卷的不会——因为模型本身一点没动 🔁</p>
+<button id="upd" class="l">✏️ 更新营业时间</button><button id="rev" class="g">↩️ 恢复原样</button>
+<div class="note" id="updnote"></div>
+</div>
+
+<div class="card"><b>📚 资料库（6 段，已切好块）</b>
+<div id="kb"></div>
+<p class="note">相似度用「关键词 + 近义词」粗略打分，仅作示意；真实 RAG 一般把每段文字变成向量（embedding），按意思远近来找。</p>
+</div>
+
+<article class="card">
+<h2>📖 文字说明：什么是 RAG（检索增强生成）？</h2>
+<p><b>RAG（检索增强生成）是先从指定资料库检索相关内容，再把内容和问题一起交给大模型、照着资料生成回答的方法。</b></p>
+<p>作者：AI替我说 ｜ 日期：2026-10-23</p>
+<p>🔹 <b>为什么需要它？</b>大模型的知识来自训练数据，有截止时间，也没见过你公司的文件或你自己的笔记。不知道的时候，它可能会顺着语言习惯编一个像样的答案。RAG 让它先查资料，相当于从「闭卷」变成「开卷」。</p>
+<p>🔹 <b>三步走：</b>① 检索（Retrieve）：拿问题去资料库里找最相关的几段；② 增强（Augment）：把这几段和问题拼成一份新的提示词；③ 生成（Generate）：模型参考这些段落写答案，并标出用了哪段。</p>
+<p>🔹 <b>怎么找得准？</b>资料会先被切成小段，再用嵌入模型变成一串数字（向量），存进向量数据库。提问时，问题也变成向量，系统找意思最接近的几段，所以字面不一样也能找到。</p>
+<p>🔹 <b>好处：</b>不用重新训练模型，更新资料库就能更新知识；能用上私有资料；回答可以附出处，方便核对。AI 联网搜索带引用、上传 PDF 问答、客服机器人、个人知识库助手，背后大多是这个思路。</p>
+<p>🔹 <b>局限：</b>找错段落、资料过时或资料里根本没有时，答案照样会错。斯坦福团队 2024 年评测用 RAG 的专业法律 AI 工具，发现它们比通用聊天 AI 错得少，但仍会出错。所以重要信息要点开出处自己核对。</p>
+<p>💡 想一想：如果给你自己做一个「开卷 AI」，你会往它的资料库里放哪些内容？哪些内容放进去之前要先确认是最新、准确的？</p>
+<p class="note">说明：本页是用规则写的模拟演示，不是真的大模型；奶茶店和手册内容都是虚构的，相似度数字为示意。原理参考 Lewis 等《Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks》（NeurIPS 2020）、IBM《What is retrieval-augmented generation?》、AWS《What is RAG?》、Magesh 等《Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools》（斯坦福，2024）。本页由 AI 辅助制作。</p>
+</article>
+
+<script>
+const $=id=>document.getElementById(id);
+const ORIG_HOURS={t:"营业时间：每天 10:00–22:00，每周一店休。",a:"周一店休，去了会扑空哦；其他日子 10:00–22:00 营业。"};
+const NEW_HOURS={t:"营业时间（新）：从 11 月起每天 9:00–23:00，全年无休。",a:"可以！新规定是全年无休，每天 9:00–23:00 营业。"};
+const KB=[
+ {id:1,t:ORIG_HOURS.t,a:ORIG_HOURS.a,kw:{"周一":.5,"星期一":.5,"营业":.4,"开门":.4,"关门":.4,"几点":.35,"休息":.25,"买奶茶":.2,"时间":.2}},
+ {id:2,t:"带薪年假：入职满一年的员工，每年带薪年假 5 天。",a:"入职满一年后，每年有 5 天带薪年假。",kw:{"年假":.6,"歇":.45,"休假":.5,"放假":.45,"几天":.3,"一年":.2,"请假":.4}},
+ {id:3,t:"杯型：中杯 500ml，大杯 700ml。",a:"中杯 500ml，大杯 700ml。",kw:{"大杯":.55,"中杯":.55,"多大":.35,"容量":.45,"杯":.2,"ml":.3,"毫升":.4}},
+ {id:4,t:"甜度：可选无糖、三分、五分、七分、全糖。",a:"甜度可选无糖、三分、五分、七分、全糖。",kw:{"甜":.5,"糖":.45,"甜度":.6,"无糖":.5,"控糖":.5}},
+ {id:5,t:"过敏提示：招牌「云朵奶盖」含乳制品和坚果碎。",a:"不建议：手册写明「云朵奶盖」含坚果碎（还含乳制品）。",kw:{"过敏":.5,"坚果":.5,"花生":.35,"乳":.3,"牛奶":.3,"奶盖":.35,"能喝":.1}},
+ {id:6,t:"打烊流程：关店前 30 分钟开始清洗设备。",a:"关店前 30 分钟开始清洗设备。",kw:{"打烊":.6,"清洗":.5,"关店":.45,"下班":.35,"收拾":.35}}
+];
+const CLOSED={1:"一般奶茶店天天开门，周一应该可以去吧～",2:"大部分公司年假是 5 到 15 天不等，具体我也说不准。",3:"大杯一般 600ml 左右？",4:"甜度通常有好几档，比如半糖、少糖。",5:"奶盖一般就是奶油和芝士，应该没问题？",6:"打烊前大概收拾一下就行。",0:"店长叫小王，人很好～"};
+const PRESET=["周一能去买奶茶吗？","我一年能歇几天？","对坚果过敏，能喝云朵奶盖吗？","店长叫什么名字？"];
+let open=true;
+$("qs").innerHTML=PRESET.map(p=>`<button class="l" data-q="${p}">${p}</button>`).join("");
+document.querySelectorAll("#qs button").forEach(b=>b.onclick=()=>{$("q").value=b.dataset.q;ask();});
+function score(q,d){let s=0;for(const [w,v] of Object.entries(d.kw)) if(q.includes(w)) s+=v;return Math.min(0.97,s);}
+function renderKB(sc,hits){
+ $("kb").innerHTML=KB.map(d=>{const s=sc?sc[d.id]:0;const hit=hits&&hits.includes(d.id);
+  return `<div class="doc ${hit?"hit":""}"><span class="n">#${d.id}</span><span class="t">${d.t}</span><span class="bar"><i style="width:${Math.round(s*100)}%"></i></span><span class="sc">${sc?s.toFixed(2):""}</span></div>`}).join("");
+}
+function ask(){
+ const q=$("q").value.trim(); const K=+$("k").value; $("kv").textContent=K;
+ if(!q){$("out").innerHTML='<div class="ans">先挑一个问题或自己输入一句 🙂</div>';return;}
+ const sc={};KB.forEach(d=>sc[d.id]=score(q,d));
+ const ranked=[...KB].sort((a,b)=>sc[b.id]-sc[a.id]); const best=ranked[0];
+ const found=sc[best.id]>=0.3;
+ if(!open){
+  renderKB(null,null);
+  const g=CLOSED[found?best.id:0];
+  $("out").innerHTML=`<div class="ans warn">🙈 闭卷回答：${g}<br><span class="note">（模型没看手册，只凭“一般情况”去猜，可能完全不对）</span></div>`;return;
+ }
+ const top=ranked.slice(0,K); renderKB(sc,top.map(d=>d.id));
+ const ctx=top.map(d=>`[#${d.id}] ${d.t}`).join("\n");
+ let h=`<div class="note" style="margin-top:8px"><span class="step">1 检索</span>翻出最相关的 ${K} 段（资料库里已高亮）</div>`;
+ h+=`<div class="note"><span class="step">2 增强</span>拼成发给 AI 的提示词：</div><div class="prompt">请只根据下面的资料回答；资料里没有就说不知道。\n${ctx}\n问题：${q}</div>`;
+ h+=`<div class="note" style="margin-top:6px"><span class="step">3 生成</span>照着资料回答：</div>`;
+ if(found) h+=`<div class="ans">📖 ${best.a} <span class="note">（出处：#${best.id}）</span></div>`;
+ else h+=`<div class="ans warn">📖 手册里没找到相关内容，我不确定。<br><span class="note">（翻到的段落都不相关。好的 RAG 会老实说不知道；如果没要求它“只根据资料”，它也可能照样编一个）</span></div>`;
+ $("out").innerHTML=h;
+}
+$("go").onclick=ask; $("q").onkeydown=e=>{if(e.key==="Enter")ask();};
+$("k").oninput=()=>{$("kv").textContent=$("k").value;if($("q").value)ask();};
+$("mClosed").onclick=()=>{open=false;$("mClosed").classList.add("on");$("mOpen").classList.remove("on");if($("q").value)ask();else renderKB(null,null);};
+$("mOpen").onclick=()=>{open=true;$("mOpen").classList.add("on");$("mClosed").classList.remove("on");if($("q").value)ask();};
+$("upd").onclick=()=>{Object.assign(KB[0],NEW_HOURS);$("updnote").textContent="✅ 已更新 #1：现在是全年无休。回到实验一再问一次周一的问题试试。";renderKB(null,null);if($("q").value)ask();};
+$("rev").onclick=()=>{Object.assign(KB[0],ORIG_HOURS);$("updnote").textContent="↩️ 已恢复：周一店休。";renderKB(null,null);if($("q").value)ask();};
+renderKB(null,null);
+</script></body></html>

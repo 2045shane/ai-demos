@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://2045shane.github.io/ai-demos/sitemap.xml
