@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEO 生成式引擎优化：网页怎样才会被 AI 引用？互动小实验 | AI替我说</title>
+<meta name="description" content="GEO（生成式引擎优化）是让网页内容更容易被 AI 搜索读懂、摘录并标为引用来源的写作和发布方法。动手给一段网页做 GEO 改造，看 AI 回答怎么变。">
+<meta name="author" content="AI替我说">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"GEO 生成式引擎优化：网页怎样才会被 AI 引用？","author":{"@type":"Person","name":"AI替我说"},"datePublished":"2026-10-24","inLanguage":"zh-CN","about":"Generative Engine Optimization"}
+</script>
+<style>
+:root{--bg:#F6F5E8;--ink:#2F3A0E;--acc:#6E7F1F;--light:#B8C46A;--pale:#E7EBC8;--sub:#7A7F63;--plum:#8E3B8A;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:28px;margin:6px 0 4px;line-height:1.35}
+h2{font-size:21px;margin:30px 0 10px;color:var(--acc)}
+.meta{color:var(--sub);font-size:14px}
+.def{background:var(--acc);color:#fff;border-radius:16px;padding:16px 18px;font-size:17px;font-weight:600;margin:16px 0}
+.card{background:#fff;border-radius:16px;padding:16px 18px;margin:12px 0;box-shadow:0 1px 0 var(--pale)}
+.toggles label{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:12px;cursor:pointer;margin:4px 0}
+.toggles label:hover{background:var(--pale)}
+.toggles input{margin-top:6px;accent-color:var(--acc);width:18px;height:18px}
+.toggles .bad input{accent-color:var(--plum)}
+.toggles small{color:var(--sub);display:block}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.cols{grid-template-columns:1fr}}
+.page{border:2px dashed var(--light);border-radius:14px;padding:12px 14px;font-size:15px;min-height:220px}
+.page h3{font-size:16px;margin:8px 0 2px;color:var(--acc)}
+.page .src{font-size:13px;color:var(--sub)}
+.page .kw{color:var(--plum)}
+.bar{height:16px;background:var(--pale);border-radius:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .4s}
+.score{font-size:30px;font-weight:800;color:var(--acc)}
+.ai{background:var(--pale);border-radius:14px;padding:12px 14px;font-size:15px}
+.cite{display:inline-block;background:var(--plum);color:#fff;border-radius:6px;padding:0 6px;font-size:12px;margin-left:2px}
+.cite.other{background:var(--sub)}
+.note{font-size:13px;color:var(--sub)}
+.end{border-left:5px solid var(--plum);padding:8px 14px;background:#fff;border-radius:0 12px 12px 0;margin-top:18px}
+ul{padding-left:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🧭 GEO 生成式引擎优化：网页怎样才会被 AI 引用？</h1>
+<div class="meta">作者：AI替我说 · 日期：2026-10-24</div>
+
+<div class="def">GEO（生成式引擎优化）是让网页内容更容易被 AI 搜索读懂、摘录并标为引用来源的写作和发布方法。</div>
+
+<h2>🧪 动手试试：给一段网页做 GEO 改造</h2>
+<p>下面是一段介绍「番茄工作法」的网页。勾选左边的改法，看看网页变成什么样，以及一个模拟的 AI 回答会不会引用它。</p>
+
+<div class="card toggles">
+<label><input type="checkbox" id="t-def"><span><b>开头一句话下定义</b><small>「X 是……」一句说清，方便 AI 直接摘走</small></span></label>
+<label><input type="checkbox" id="t-qa"><span><b>加小标题，做成问答结构</b><small>一个小标题回答一个问题</small></span></label>
+<label><input type="checkbox" id="t-data"><span><b>写进具体数字</b><small>用确切的时长代替「一段时间」</small></span></label>
+<label><input type="checkbox" id="t-src"><span><b>注明出处</b><small>写清方法是谁提出的、出自哪本书</small></span></label>
+<label><input type="checkbox" id="t-author"><span><b>署名和日期</b><small>让 AI 知道是谁写的、新不新</small></span></label>
+<label class="bad"><input type="checkbox" id="t-kw"><span><b>堆关键词（老式 SEO 做法）</b><small>把「番茄工作法」重复塞很多遍</small></span></label>
+</div>
+
+<div class="cols">
+<div>
+<div class="note">📄 你的网页</div>
+<div class="page" id="page"></div>
+</div>
+<div>
+<div class="note">📊 引用友好度（示意分）</div>
+<div class="card" style="margin-top:4px">
+<div class="score" id="score">0</div>
+<div class="bar"><i id="bar" style="width:0%"></i></div>
+<div class="note" id="tip" style="margin-top:8px"></div>
+</div>
+<div class="note">🤖 模拟 AI 回答：「番茄工作法是什么？」</div>
+<div class="ai" id="ai"></div>
+</div>
+</div>
+<p class="note">说明：分数和 AI 回答都是按研究结论做的示意，不是真实 AI 搜索的打分。真实的 AI 搜索怎么挑来源，各家都没公开，规则也一直在变。</p>
+
+<h2>📖 GEO 是怎么回事？</h2>
+<h3>AI 搜索和传统搜索有什么不同？</h3>
+<p>传统搜索给你一串链接，网站争的是排在前面，这叫 SEO（搜索引擎优化）。AI 搜索会先搜一批网页，读完后直接写成一段回答，只在角标里引用少数几个来源。GEO 关心的是：你的内容能不能被 AI 读懂、摘录、标成出处。</p>
+<h3>AI 搜索大致怎么挑来源？</h3>
+<p>流程和 RAG（检索增强生成）类似：先搜索，再从网页里挑出最能回答问题的句子，最后组织成答案并标注出处。所以一句话就能说清问题、有据可查的段落，更容易被「摘走」。</p>
+<h3>研究发现了什么？</h3>
+<p>普林斯顿大学等团队在 2023 年提出「GEO」这个说法，论文发表在 KDD 2024。他们用上万个问题测试了多种改写网页的方法，发现「写上引用来源」「加入权威引语」「加入统计数据」效果最好，在 AI 回答里的可见度最高能提升约 40%，原本排名靠后的网站受益更明显；而传统 SEO 的堆关键词几乎没有帮助。</p>
+<h3>普通人怎么用？</h3>
+<ul>
+<li>开头一句话下定义，后面用小标题回答具体问题。</li>
+<li>数字要真实，出处要能查到，不要编。</li>
+<li>写上作者和日期，关键内容用文字写，别只放在图片里。</li>
+</ul>
+<p class="note">参考：Aggarwal, Murahari 等《GEO: Generative Engine Optimization》（KDD 2024，arXiv:2311.09735）。示例里的番茄工作法由 Francesco Cirillo 提出。</p>
+
+<div class="end"><b>想一想：</b>当越来越多人直接问 AI 要答案，一篇文章的价值，会不会从「被多少人点开」变成「被 AI 引用了多少次」？</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const ids=["def","qa","data","src","author","kw"];
+function render(){
+  const s={};ids.forEach(k=>s[k]=$("t-"+k).checked);
+  let h="";
+  if(s.author) h+='<div class="src">作者：小林 · 更新于 2026-10-24</div>';
+  if(s.def) h+='<p><b>番茄工作法是一种把工作切成固定时长的专注段、中间穿插短暂休息的时间管理方法。</b></p>';
+  if(s.qa) h+='<h3>怎么做？</h3>';
+  h+= s.data ? '<p>设一个 25 分钟的计时器专心做一件事，响了就休息 5 分钟；每完成 4 个番茄钟，休息 15–30 分钟。</p>'
+             : '<p>这个方法挺好用的，大概就是专心做一会儿事，然后休息一下，再继续，循环几次，效率会高不少。</p>';
+  if(s.qa) h+='<h3>是谁提出的？</h3>';
+  h+= s.src ? '<p>由意大利人 Francesco Cirillo 在 20 世纪 80 年代末提出，名字来自他用的番茄形状厨房计时器。<span class="src">（出处：Cirillo《The Pomodoro Technique》）</span></p>'
+            : '<p>据说是国外一个人发明的，很多人都在用。</p>';
+  if(s.kw) h+='<p class="kw">番茄工作法 番茄工作法教程 番茄工作法怎么用 最好的番茄工作法 番茄工作法番茄工作法</p>';
+  $("page").innerHTML=h;
+  // 示意分：按研究方向加减，不代表真实算法
+  let sc=10+(s.def?18:0)+(s.qa?12:0)+(s.data?20:0)+(s.src?22:0)+(s.author?10:0)-(s.kw?12:0);
+  sc=Math.max(0,Math.min(100,sc));
+  $("score").textContent=sc; $("bar").style.width=sc+"%";
+  $("bar").style.background= s.kw? "var(--plum)":"var(--acc)";
+  let tip = sc>=75 ? "✅ 定义清楚、有数字、有出处，AI 很容易摘一句就用。"
+          : sc>=40 ? "🙂 有进步，再加上数字或出处试试。"
+          : "😶 内容太含糊，AI 很难从里面摘出能用的句子。";
+  if(s.kw) tip+=" 堆关键词没加分，读起来还更乱。";
+  $("tip").textContent=tip;
+  let a;
+  if(sc>=75) a='番茄工作法是一种把工作切成固定专注段、穿插短暂休息的时间管理方法<span class="cite">你的网页</span>。通常专注 25 分钟、休息 5 分钟，每 4 轮后长休息<span class="cite">你的网页</span>，由 Francesco Cirillo 在 20 世纪 80 年代末提出<span class="cite other">其他网站</span>。';
+  else if(sc>=40) a='番茄工作法是一种时间管理方法<span class="cite other">其他网站</span>，核心是专注一段时间后短暂休息<span class="cite">你的网页</span>。';
+  else a='番茄工作法是一种时间管理方法，常见做法是专注 25 分钟、休息 5 分钟<span class="cite other">其他网站</span><span class="cite other">其他网站</span>。';
+  $("ai").innerHTML=a;
+}
+ids.forEach(k=>$("t-"+k).addEventListener("change",render));
+render();
+</script>
+</body>
+</html>

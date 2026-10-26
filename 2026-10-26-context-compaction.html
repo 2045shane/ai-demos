@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>对话压缩（Compaction）是什么？长对话交接摘要互动小实验 | AI替我说</title>
+<meta name="description" content="对话压缩是把越来越长的聊天记录总结成交接摘要、替换旧消息，让 AI 在新的上下文里接着工作的方法。动手调压缩力度，看摘要留下了什么、丢了什么。">
+<meta name="author" content="AI替我说">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"对话压缩（Compaction）是什么？","author":{"@type":"Person","name":"AI替我说"},"datePublished":"2026-10-26","inLanguage":"zh-CN","about":"LLM context compaction: summarizing long conversations into a handoff summary"}
+</script>
+<style>
+:root{--bg:#FBF0F7;--ink:#4B0F3E;--mag:#C2258E;--light:#EBA6D6;--pale:#F6DCEE;--sub:#8B6B82;--teal:#0F9AA8;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:28px;margin:6px 0 4px;line-height:1.35}
+h2{font-size:21px;margin:30px 0 10px;color:var(--mag)}
+.meta{color:var(--sub);font-size:14px}
+.def{background:var(--mag);color:#fff;border-radius:16px;padding:16px 18px;font-size:17px;font-weight:600;margin:16px 0}
+.card{background:#fff;border-radius:16px;padding:16px 18px;margin:12px 0;box-shadow:0 1px 0 var(--pale)}
+.ctrl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:8px 0}
+input[type=range]{accent-color:var(--mag);width:220px}
+button{background:var(--ink);color:var(--light);border:0;border-radius:999px;padding:9px 18px;font-size:15px;font-weight:700;cursor:pointer}
+button.alt{background:var(--pale);color:var(--ink)}
+button.sel{background:var(--mag);color:#fff}
+.msgs{display:grid;gap:6px;margin-top:8px}
+.msg{border-radius:12px;padding:7px 12px;font-size:15px;background:var(--pale);transition:.3s}
+.msg.ai{background:#fff;border:1px solid var(--pale)}
+.msg.hide{display:none}
+.msg.drop{opacity:.3;text-decoration:line-through}
+.tag{display:inline-block;font-size:12px;border-radius:999px;padding:0 8px;margin-right:6px;background:var(--ink);color:#fff}
+.tag.k{background:var(--teal)}
+.chart{display:flex;align-items:flex-end;gap:4px;height:120px;margin:8px 0;border-bottom:2px solid var(--pale)}
+.chart div{flex:1;background:var(--light);border-radius:4px 4px 0 0;transition:.3s}
+.chart div.now{background:var(--mag)}
+.small{font-size:13px;color:var(--sub)}
+.sum{background:var(--pale);border-radius:12px;padding:12px 14px;font-size:15px;white-space:pre-wrap}
+.q{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dashed var(--pale);font-size:15px}
+.ok{color:var(--teal);font-weight:700}.no{color:var(--mag);font-weight:700}
+.big{font-size:20px;font-weight:700;color:var(--mag)}
+footer{margin-top:36px;color:var(--sub);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="meta">作者：AI替我说 · 2026-10-26</p>
+<h1>对话压缩（Compaction）是什么？</h1>
+<p class="def">对话压缩是把越来越长的聊天记录总结成一份交接摘要、替换掉旧消息，让 AI 在新的上下文里接着工作的方法。</p>
+
+<h2>实验一：越聊越长，AI 每轮要重读多少？</h2>
+<div class="card">
+<p class="small">下面是一段虚构的「帮我规划周末旅行」对话。大模型本身不存聊天记录，App 每次都会把前面所有消息连同新问题一起交给它重读。拖动滑块看每一轮要读的字数（按本页文字计数，示意）。</p>
+<div class="ctrl"><span>聊到第</span><input type="range" id="turn" min="1" max="14" value="4"><span id="turnV"></span><span>条消息</span></div>
+<div class="chart" id="chart"></div>
+<p>这一轮 AI 要重读 <span class="big" id="now"></span> 字；到目前为止累计读了 <span class="big" id="tot"></span> 字。</p>
+<div class="msgs" id="msgs"></div>
+</div>
+
+<h2>实验二：压缩成交接摘要，再考考「接力 AI」</h2>
+<div class="card">
+<p class="small">选一个压缩力度，看哪些消息被留下、哪些被丢掉，再看拿着这份摘要开新对话的 AI 能不能答对 4 个关键问题。</p>
+<div class="ctrl">
+<button class="alt" data-lv="0">不压缩</button>
+<button class="alt" data-lv="1">轻度：删寒暄和重复</button>
+<button class="alt" data-lv="2">中度：再删试错过程</button>
+<button class="alt" data-lv="3">狠压：只留目标和结论</button>
+</div>
+<p>原对话 <b id="before"></b> 字 → 摘要 <b id="after"></b> 字（约为原来的 <b id="ratio"></b>）</p>
+<div class="sum" id="sum"></div>
+<h3 style="font-size:17px;margin:14px 0 4px">接力 AI 小测验</h3>
+<div id="quiz"></div>
+<p class="small" id="tip"></p>
+</div>
+
+<h2>为什么需要对话压缩</h2>
+<p><b>模型不「记得」你：</b>常见的大模型接口是无状态的，每次请求都要把之前的对话一起发过去，模型才能接上话。所以对话越长，每次要读的内容越多，回复会更慢、更费额度，最后还可能装满上下文窗口。</p>
+<p><b>装得下不等于记得清：</b>Anthropic 在《Effective context engineering for AI agents》中提到「上下文腐烂」（context rot）：随着上下文里的内容变多，模型准确回忆信息的能力会下降，哪怕窗口还没装满。</p>
+<p><b>压缩怎么做：</b>把快装满的对话交给模型总结，用摘要替换旧消息，再带着摘要和最近几轮原话继续。Anthropic 介绍 Claude Code 就是这样做的：保留关键决定、没解决的问题和实现细节，丢掉冗余的工具输出。</p>
+<p><b>摘要该留什么：</b>目标、已定的结论、约束和偏好、没解决的问题、关键数字原文。寒暄、重复、试错过程可以丢。压得太狠，会丢掉后来才发现重要的细节，就像实验二里的「狠压」。</p>
+<p><b>普通人怎么用：</b>聊得很长、AI 开始忘事或答非所问时，让它把对话整理成「目标 / 结论 / 约束 / 待办」四段交接摘要，自己核对后贴到新对话开头。</p>
+
+<h2>小结</h2>
+<p>对话压缩 = 把长聊天写成一页交接单。窗口再大也会满，会「记重点」比「全都记」更重要。🤔 如果只能留 5 句话交给下一个 AI，哪 5 句最不能丢？</p>
+
+<footer>作者：AI替我说 · 2026-10-26 · 本页由 AI 辅助 vibe coding 制作。原理参考 Anthropic《Effective context engineering for AI agents》、Claude 文档「Compaction」、OpenAI 文档「Conversation state」；对话内容、字数和小测验均为示意。</footer>
+</div>
+<script>
+const M=[
+{r:"u",t:"闲聊",s:"嗨～在吗？想请你帮个忙😊"},
+{r:"a",t:"闲聊",s:"在的！想让我帮什么？"},
+{r:"u",t:"目标",s:"帮我规划这个周末去杭州的两天一夜行程，两个人。"},
+{r:"u",t:"约束",s:"预算一共 1500 元以内，我朋友不吃辣。"},
+{r:"a",t:"试错",s:"可以考虑住西湖边的湖景酒店，一晚大约 1200 元（示意）。"},
+{r:"u",t:"试错",s:"太贵了，住宿别超过 400。"},
+{r:"a",t:"结论",s:"那就订地铁站附近的快捷酒店，一晚约 350 元（示意），已帮你列进行程。"},
+{r:"u",t:"重复",s:"对了再说一遍，我朋友不吃辣哈。"},
+{r:"a",t:"结论",s:"好的。周六上午西湖骑行，下午灵隐寺；晚饭选清淡的杭帮菜。"},
+{r:"u",t:"闲聊",s:"哈哈太好了，你真贴心！"},
+{r:"u",t:"约束",s:"周日下午 4 点前要坐上回程高铁。"},
+{r:"a",t:"结论",s:"周日上午去河坊街，午饭后直接去火车站。"},
+{r:"u",t:"待办",s:"回程高铁票还没买，记得提醒我。"},
+{r:"a",t:"闲聊",s:"收到～祝你们玩得开心！"}];
+const len=m=>m.s.length;
+const msgs=document.getElementById('msgs'),chart=document.getElementById('chart');
+M.forEach((m,i)=>{const d=document.createElement('div');d.className='msg'+(m.r=='a'?' ai':'');d.id='m'+i;
+d.innerHTML=`<span class="tag">${m.r=='u'?'我':'AI'}</span>${m.s}`;msgs.appendChild(d);
+const b=document.createElement('div');chart.appendChild(b);});
+function upd(){const n=+turn.value;turnV.textContent=n;let cum=0,tot=0,max=0;const per=[];
+M.forEach((m,i)=>{cum+=len(m);per.push(cum);});max=per[per.length-1];
+per.forEach((v,i)=>{const b=chart.children[i];b.style.height=(i<n?v/max*100:0)+'%';b.className=i==n-1?'now':'';if(i<n)tot+=v;});
+M.forEach((m,i)=>document.getElementById('m'+i).classList.toggle('hide',i>=n));
+now.textContent=per[n-1];document.getElementById('tot').textContent=tot;}
+turn.oninput=upd;upd();
+const drop=[[],["闲聊","重复"],["闲聊","重复","试错"],["闲聊","重复","试错","约束","待办"]];
+const Q=[["这趟行程的目标是什么？","目标"],["预算多少、有什么忌口？","约束"],["住哪家、行程定了没？","结论"],["还有什么事没办？","待办"]];
+const sumText={
+0:null,
+1:"【交接摘要】\n目标：规划本周末杭州两天一夜，两个人。\n约束：总预算 1500 元内；朋友不吃辣；周日下午 4 点前坐上回程高铁。\n讨论过：湖景酒店约 1200 元/晚太贵，用户要求住宿不超过 400。\n结论：住地铁站附近快捷酒店约 350 元/晚；周六西湖骑行+灵隐寺，晚饭清淡杭帮菜；周日上午河坊街，午饭后去车站。\n待办：回程高铁票还没买，需要提醒。",
+2:"【交接摘要】\n目标：杭州两天一夜，两人。\n约束：总预算 1500 内，住宿≤400/晚；朋友不吃辣；周日 16:00 前坐上回程高铁。\n结论：地铁站旁快捷酒店约 350/晚；周六西湖骑行、灵隐寺、清淡杭帮菜；周日河坊街，午饭后去车站。\n待办：提醒买回程高铁票。",
+3:"【交接摘要】\n目标：杭州两天一夜，两人。\n结论：住快捷酒店；周六西湖、灵隐寺；周日河坊街后去车站。"};
+function compress(lv){document.querySelectorAll('[data-lv]').forEach(b=>b.className=+b.dataset.lv==lv?'sel':'alt');
+turn.value=14;upd();
+M.forEach((m,i)=>document.getElementById('m'+i).classList.toggle('drop',drop[lv].includes(m.t)));
+const all=M.map(m=>m.s).join('');const s=lv==0?M.map(m=>(m.r=='u'?'我：':'AI：')+m.s).join('\n'):sumText[lv];
+before.textContent=all.length;const sl=lv==0?all.length:s.replace(/\n/g,'').length;after.textContent=sl;
+ratio.textContent=Math.round(sl/all.length*100)+'%';sum.textContent=s;
+let ok=0;quiz.innerHTML=Q.map(([q,t])=>{const has=!drop[lv].includes(t);if(has)ok++;return `<div class="q"><span>${q}</span><span class="${has?'ok':'no'}">${has?'✅ 答得上':'❌ 答不上'}</span></div>`}).join('');
+tip.textContent=lv==0?'不压缩：信息最全，但每轮都要重读全部内容，越聊越慢。':lv==3?'狠压后字数最少，但预算、忌口、回程时间和待办都丢了，接力 AI 可能推荐辣菜、超预算、误了车。':'答对 '+ok+'/4：去掉的是寒暄、重复和试错，关键信息都还在。';}
+document.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>compress(+b.dataset.lv));compress(2);
+</script>
+</body>
+</html>
