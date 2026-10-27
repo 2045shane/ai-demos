@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 内容标识是什么？明标、元数据和隐形水印互动小实验 | AI替我说</title>
+<meta name="description" content="AI 内容标识是给 AI 生成的文字、图片、音频和视频加上的身份标记，分为看得见的显式标识和藏在文件数据里的隐式标识。动手把一张 AI 图截图、裁剪、压缩，看哪种标识先丢。">
+<meta name="author" content="AI替我说">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"AI 内容标识是什么？","author":{"@type":"Person","name":"AI替我说"},"datePublished":"2026-10-27","inLanguage":"zh-CN","about":"AI-generated content labeling: visible labels, metadata (C2PA content credentials) and invisible watermarks (SynthID)"}
+</script>
+<style>
+:root{--bg:#FFF6F3;--ink:#5A0F1A;--red:#D7263D;--light:#F4A3AC;--pale:#FCE1E4;--sub:#8A6F72;--navy:#1B2A6B;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:28px;margin:6px 0 4px;line-height:1.35}
+h2{font-size:21px;margin:30px 0 10px;color:var(--red)}
+.meta{color:var(--sub);font-size:14px}
+.def{background:var(--red);color:#fff;border-radius:16px;padding:16px 18px;font-size:17px;font-weight:600;margin:16px 0}
+.card{background:#fff;border-radius:16px;padding:16px 18px;margin:12px 0;box-shadow:0 1px 0 var(--pale)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+canvas{width:100%;border-radius:12px;display:block;background:var(--pale)}
+.ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+button{background:var(--ink);color:var(--light);border:0;border-radius:999px;padding:9px 16px;font-size:15px;font-weight:700;cursor:pointer}
+button.alt{background:var(--pale);color:var(--ink)}
+button.navy{background:var(--navy);color:#fff}
+.st{border-radius:12px;padding:10px 12px;margin:8px 0;background:var(--pale)}
+.st b{display:block}
+.ok{color:var(--navy);font-weight:700}.no{color:var(--red);font-weight:700}
+.bar{height:12px;background:var(--pale);border-radius:99px;overflow:hidden;margin-top:6px;border:1px solid var(--light)}
+.bar i{display:block;height:100%;background:var(--navy);transition:.4s}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:pre-wrap;color:var(--ink)}
+.log{font-size:14px;color:var(--sub);min-height:22px}
+.verdict{border-radius:14px;padding:14px 16px;font-size:18px;font-weight:700;margin-top:10px;background:var(--pale)}
+.small{font-size:13px;color:var(--sub)}
+label{font-size:15px;cursor:pointer}
+input[type=checkbox]{accent-color:var(--red);width:18px;height:18px;vertical-align:-3px}
+table{border-collapse:collapse;width:100%;font-size:15px;background:#fff;border-radius:12px;overflow:hidden}
+th{background:var(--ink);color:#fff;padding:8px}td{padding:8px;border-bottom:1px solid var(--pale);text-align:center}td:first-child{text-align:left}
+footer{margin-top:36px;color:var(--sub);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="meta">作者：AI替我说 · 2026-10-27</p>
+<h1>AI 内容标识是什么？</h1>
+<p class="def">AI 内容标识是给 AI 生成的文字、图片、音视频加上的“身份标记”，分为看得见的显式标识和藏在文件数据里的隐式标识。</p>
+
+<h2>实验一：让一张 AI 图在网上“旅行”一圈</h2>
+<div class="card">
+<p class="small">下面是一张虚构的「AI 画的海边日落」。它一开始带着三层标识：右下角的明标、文件里的元数据、藏在像素里的隐形水印。点按钮对它做常见操作，看哪层标识先丢。水印强度和丢失规则都是按公开资料写的简化模拟（示意），不是真实检测。</p>
+<div class="grid">
+<div><canvas id="cv" width="480" height="360"></canvas><p class="log" id="log">还没做任何操作。</p></div>
+<div>
+<div class="st"><b>① 明标（角标）</b><span id="sBadge"></span></div>
+<div class="st"><b>② 元数据（文件头里的“快递单”）</b><span id="sMeta"></span><div class="mono" id="metaTxt"></div></div>
+<div class="st"><b>③ 隐形水印（像素里的“防伪线”）</b><span id="sWm"></span><div class="bar"><i id="wmBar"></i></div></div>
+</div>
+</div>
+<div class="ctrl">
+<button data-op="shot">📸 截图</button>
+<button data-op="save">💾 编辑后另存 / 转格式</button>
+<button data-op="corner">✂️ 裁掉右下角</button>
+<button data-op="filter">🎨 加滤镜</button>
+<button data-op="jpeg">🗜️ 反复压缩 50 次</button>
+<button data-op="bigcrop">✂️ 大幅裁剪</button>
+<button class="alt" id="reset">↺ 重置</button>
+</div>
+</div>
+
+<h2>实验二：发到平台上，会被怎么提示？</h2>
+<div class="card">
+<p class="small">按《人工智能生成合成内容标识办法》第六条的思路：平台先查元数据，再看用户有没有主动声明，最后看有没有角标、水印等痕迹。用实验一里处理过的图，选一下发布时勾不勾声明。</p>
+<div class="ctrl"><label><input type="checkbox" id="declare"> 发布时主动声明「含 AI 合成内容」</label><button class="navy" id="post">🚀 模拟发布</button></div>
+<div class="verdict" id="verdict">还没发布。</div>
+<p class="small" id="why"></p>
+</div>
+
+<h2>为什么要给 AI 内容做标识</h2>
+<p><b>肉眼和检测器都靠不住：</b>AI 生成的图片、文字、声音越来越逼真。OpenAI 在 2023 年推出过一个识别 AI 文字的分类器，官方测试中只认出 26% 的 AI 文本，还把 9% 的人写文字误判为 AI，当年 7 月因准确率低下线。所以更可靠的思路是：在生成时就打上标记，而不是事后去猜。</p>
+<p><b>我国的规定：</b>国家网信办等四部门发布的《人工智能生成合成内容标识办法》自 2025 年 9 月 1 日起施行，配套强制性国家标准 GB 45438—2025 同步实施。办法把标识分成显式标识和隐式标识，还要求用户发布 AI 生成内容时主动声明，任何组织和个人不得恶意删除、篡改、伪造、隐匿标识。</p>
+
+<h2>明标：看得见的提示</h2>
+<p>显式标识是人能直接看到或听到的提示：文本在开头、结尾或中间加文字提示；图片在适当位置加显著提示（常见的是角标）；音频加语音或节奏提示；视频在起始画面和播放周边加提示。它最直观，但也最容易被裁掉或 P 掉。</p>
+
+<h2>暗标：元数据和隐形水印</h2>
+<p><b>元数据</b>是写在文件里的描述信息。按办法，隐式标识要包含生成合成属性、服务提供者名称或编码、内容编号等。国际上常见的 C2PA「内容凭证」也是元数据路线，带数字签名，被改动会留下痕迹；但截图、编辑后另存、转格式，都可能让元数据整个丢掉。</p>
+<p><b>数字水印</b>是把人察觉不到的信号直接嵌进像素或声音波形里，比如谷歌 DeepMind 的 SynthID。它跟着内容走，截图、轻度裁剪、加滤镜后通常还能检测到；但大幅裁剪、反复压缩、大改写等强烈修改，也可能让它失效。办法对元数据标识是「应当」，对数字水印是「鼓励」。</p>
+<table>
+<tr><th>常见操作</th><th>元数据</th><th>隐形水印</th></tr>
+<tr><td>截图</td><td class="no">常丢</td><td class="ok">通常还在</td></tr>
+<tr><td>编辑后另存、转格式</td><td class="no">常丢</td><td class="ok">通常还在</td></tr>
+<tr><td>轻度裁剪、加滤镜</td><td class="no">可能丢</td><td class="ok">通常还在</td></tr>
+<tr><td>大幅裁剪＋反复压缩</td><td class="no">丢</td><td class="no">可能失效</td></tr>
+</table>
+<p class="small">表格是大致规律（示意），不同工具差别很大。正因为各有短板，OpenAI 和谷歌都把元数据和水印组合着用。</p>
+
+<h2>普通人怎么用</h2>
+<p>发自己用 AI 做的图文视频时，用平台提供的声明功能标出来（小红书发布页可选「笔记含AI合成内容」）；别去删 AI 工具自带的角标和水印；看到一张图没有任何标识，也不代表它一定是真人拍的，重要信息还是要多找几个来源核实。</p>
+<p><b>一句话：明标给人看，暗标给机器查；没看到标识，不等于不是 AI。</b></p>
+
+<footer>作者：AI替我说 · 2026-10-27 · 本页由 AI 辅助制作。实验为规则模拟，不连接真实检测服务，也不收集任何数据。原理参考：《人工智能生成合成内容标识办法》（中国政府网）、GB 45438—2025、OpenAI《Provenance signals in OpenAI-generated content》与 AI 文字分类器公告、Google DeepMind SynthID 论文、C2PA/CAI 公开资料、Ars Technica 对 SynthID 的测试报道。</footer>
+</div>
+<script>
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+let S;
+function init(){S={badge:true,meta:true,wm:100,filter:false,crop:0,jpeg:0,shots:0,ops:[]};render();verdict.textContent='还没发布。';why.textContent='';}
+function scene(c){
+ const g=c.createLinearGradient(0,0,0,360);g.addColorStop(0,'#1B2A6B');g.addColorStop(.55,'#D7263D');g.addColorStop(.56,'#F4A3AC');g.addColorStop(1,'#5A0F1A');
+ c.fillStyle=g;c.fillRect(0,0,480,360);
+ c.fillStyle='#FCE1E4';c.beginPath();c.arc(240,198,46,Math.PI,0);c.fill();
+ c.strokeStyle='rgba(255,246,243,.6)';c.lineWidth=3;
+ for(let i=0;i<6;i++){c.beginPath();c.moveTo(150+i*8,215+i*18);c.lineTo(330-i*8,215+i*18);c.stroke();}
+ c.fillStyle='#5A0F1A';c.beginPath();c.moveTo(0,300);c.quadraticCurveTo(120,270,240,300);c.quadraticCurveTo(360,330,480,295);c.lineTo(480,360);c.lineTo(0,360);c.fill();
+}
+function render(){
+ const off=document.createElement('canvas');off.width=480;off.height=360;const o=off.getContext('2d');
+ scene(o);
+ if(S.badge){o.fillStyle='rgba(255,255,255,.92)';o.beginPath();o.roundRect(370,318,100,32,10);o.fill();o.fillStyle='#D7263D';o.font='bold 17px sans-serif';o.fillText('AI 生成',388,340);}
+ ctx.save();ctx.clearRect(0,0,480,360);
+ if(S.filter)ctx.filter='sepia(.7) saturate(1.4) hue-rotate(-15deg)';
+ const k=1-S.crop;ctx.drawImage(off,0,0,480*k,360*k,0,0,480,360);ctx.restore();
+ if(S.jpeg){const b=Math.min(4+S.jpeg*3,16);const d=ctx.getImageData(0,0,480,360);
+  for(let y=0;y<360;y+=b)for(let x=0;x<480;x+=b){const i=(y*480+x)*4;ctx.fillStyle=`rgb(${d.data[i]},${d.data[i+1]},${d.data[i+2]})`;ctx.fillRect(x,y,b,b);}}
+ sBadge.innerHTML=S.badge?'<span class="ok">✅ 还在</span>':'<span class="no">❌ 被裁掉了</span>';
+ sMeta.innerHTML=S.meta?'<span class="ok">✅ 还在</span>':'<span class="no">❌ 丢了（新文件里没有这段信息）</span>';
+ metaTxt.textContent=S.meta?'AIGC：是（AI 生成）\n生成服务：示意AI画图\n内容编号：DEMO-20261027-0001':'（空）';
+ const det=S.wm>=40;sWm.innerHTML=(det?'<span class="ok">✅ 还能检测到</span>':'<span class="no">❌ 太弱，检测不出来了</span>')+` <span class="small">强度 ${S.wm}%（示意）</span>`;
+ wmBar.style.width=S.wm+'%';wmBar.style.background=det?'var(--navy)':'var(--red)';
+ log.textContent=S.ops.length?'已做：'+S.ops.join(' → '):'还没做任何操作。';
+}
+const OPS={
+ shot:['截图',()=>{S.meta=false;S.wm=Math.max(0,S.wm-5);}],
+ save:['编辑后另存',()=>{S.meta=false;S.wm=Math.max(0,S.wm-5);}],
+ corner:['裁掉右下角',()=>{S.badge=false;S.meta=false;S.crop=Math.max(S.crop,.12);S.wm=Math.max(0,S.wm-10);}],
+ filter:['加滤镜',()=>{S.filter=true;S.meta=false;S.wm=Math.max(0,S.wm-10);}],
+ jpeg:['反复压缩 50 次',()=>{S.jpeg++;S.meta=false;S.wm=Math.max(0,S.wm-25);}],
+ bigcrop:['大幅裁剪',()=>{S.badge=false;S.meta=false;S.crop=.45;S.wm=Math.max(0,S.wm-35);}]
+};
+document.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>{const [n,fn]=OPS[b.dataset.op];fn();S.ops.push(n);render();});
+reset.onclick=init;
+post.onclick=()=>{
+ const dec=declare.checked,det=S.wm>=40;let v,w;
+ if(S.meta){v='🏷️ 平台提示：该内容属于 AI 生成合成内容';w='平台从元数据里读到了「AI 生成」，可以明确提示。';}
+ else if(dec){v='🏷️ 平台提示：该内容可能为 AI 生成合成内容';w='元数据丢了，但你主动声明了，平台按你的声明加提示。';}
+ else if(S.badge||det){v='🔎 平台提示：该内容疑似 AI 生成合成内容';w='元数据丢了、你也没声明，但平台检测到了'+(S.badge?'角标':'')+(S.badge&&det?'和':'')+(det?'隐形水印':'')+'等痕迹，识别为疑似。';}
+ else{v='❓ 没识别出任何标识';w='三层标识全丢、也没声明，平台查不出来。但这不代表它是真人拍的——它明明就是 AI 画的。';}
+ verdict.textContent=v;why.textContent=w;
+};
+init();
+</script>
+</body>
+</html>

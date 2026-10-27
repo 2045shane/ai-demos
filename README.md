@@ -19,6 +19,7 @@
 | `2026-10-24-generative-engine-optimization.html` | GEO 生成式引擎优化 |
 | `2026-10-25-ai-video-dubbing.html` | AI 视频翻译配音是怎么做的？ |
 | `2026-10-26-context-compaction.html` | 对话压缩（Compaction）是什么？ |
+| `2026-10-27-ai-content-labeling.html` | AI 内容标识是什么？ |
 | `temperature.html`、`agent.html`、`Prompt Injection Mini-Experiment.html` | 仓库里原有的旧网址，现在是跳转页，会自动跳到新文件名，旧链接不会失效 |
 | `sitemap.xml` | 站点地图，给 Google / Bing 用 |
 | `robots.txt` | 允许抓取，并指向站点地图 |
