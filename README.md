@@ -10,7 +10,8 @@
 
 | 文件 | 说明 |
 |---|---|
-| `index.html` | 首页，按日期列出全部小实验（中文标题和一句话说明） |
+| `index.html` | 首页展厅：按四个分类展示全部小实验，并有独立的插件简介区 |
+| `assets/gallery.css` | 首页展厅样式（只给首页用） |
 | `2026-10-19-llm-temperature.html` | AI 是怎么“说话”的？温度小实验 |
 | `2026-10-20-prompt-injection.html` | AI 也会被“骗”？提示注入小实验 |
 | `2026-10-21-ai-agent.html` | AI 智能体是个啥？想→做→看 小实验 |
@@ -60,7 +61,7 @@ sed -i '' 's#2045shane.github.io/ai-demos/#2045shane.github.io/新仓库名/#g' 
 ## 以后再加新页面
 
 1. 把新页面按 `YYYY-MM-DD-英文短横线.html` 命名，放进仓库根目录。
-2. 在 `index.html` 的列表最上面复制一行 `<li>…</li>`，改链接、日期、标题和一句话。
+2. 在 `index.html` 对应分类的卡片区里加一张卡片，写上链接、日期、标题和一句话。新实验要落进已有分类，不要再排成一条按日期的总列表。
 3. 在 `sitemap.xml` 里加一行 `<url>`。
 
 ## 之后可选：Google Search Console（免费）
