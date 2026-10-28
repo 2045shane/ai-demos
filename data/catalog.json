@@ -124,6 +124,17 @@
       "label": "独立项目 · 浏览器扩展"
     },
     {
+      "title": "长页存档",
+      "description": "本地优先 Chrome 扩展：网页导出 PNG·PDF·Markdown·ZIP（长图、A4 PDF、Markdown 或离线 ZIP）；无 AI API。安装与用法见 GitHub README。A local-first Chrome extension that exports a full webpage as a PNG, paginated A4 PDF, editable Markdown, or an offline Markdown ZIP with local images.",
+      "date": "2026-10-28",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/longpage-archive",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
       "title": "AI研究",
       "description": "浏览器扩展。这一版还没有公开，页面上不提供下载。",
       "date": "",
