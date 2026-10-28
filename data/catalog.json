@@ -113,6 +113,17 @@
       "label": "独立项目"
     },
     {
+      "title": "YouTube 公开评论导出",
+      "description": "Chrome 扩展：导出 YouTube 公开视频/Shorts 已加载评论为 CSV；可选 BYOK 情绪分析。安装与用法见 GitHub README。",
+      "date": "2026-10-28",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/social-comments-export",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
       "title": "AI研究",
       "description": "浏览器扩展。这一版还没有公开，页面上不提供下载。",
       "date": "",
