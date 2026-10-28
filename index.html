@@ -2,157 +2,73 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shane的AI奇怪研究</title>
-<meta name="description" content="这里是 Shane 的公开 AI 作品橱窗：互动小实验、独立工具和插件简介。规则模拟，不连真实大模型，不收集数据。">
+<meta name="description" content="把复杂的 AI 概念，变成可以亲手体验的小实验。Shane 的 Independent AI Lab。">
 <meta name="author" content="Shane">
 <meta name="google-site-verification" content="r6dIfRvzg3nG4x4mi77TU_yQDqr5ySB7E2y8gx4CbwM">
 <link rel="canonical" href="https://2045shane.github.io/ai-demos/">
-<link rel="stylesheet" href="assets/gallery.css">
+<link rel="stylesheet" href="assets/lab.css">
 </head>
 <body>
-<a class="skip" href="#gallery">跳到展品</a>
-<header class="mast frame">
-  <p class="eyebrow">公开作品橱窗</p>
-  <h1>Shane的AI奇怪研究</h1>
-  <p class="lede">这里是 Shane 的公开 AI 作品橱窗：互动小实验、独立工具和插件简介。按主题逛，一点就知道做过什么。</p>
-  <p class="byline">作者：Shane ｜ 更新：2026-10-28</p>
-  <nav class="toc" aria-label="展厅分区">
-    <a href="#cat-basics">基础概念</a>
-    <a href="#cat-safety">安全与风险</a>
-    <a href="#cat-systems">系统与应用</a>
-    <a href="#cat-visibility">可见与引用</a>
-    <a href="#plugins">插件简介</a>
-  </nav>
+<a class="skip" href="#latest">跳到 Latest</a>
+<header class="nav wrap">
+  <a class="brand" href="./"><span>SHANE</span><span class="slash">/</span><span>AI LAB</span></a>
+  <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+  <ul class="nav-links" id="site-nav">
+    <li><a href="#latest">Latest</a></li>
+    <li><a href="#explore">Explore</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
 </header>
 
-<main id="gallery" class="frame">
-  <section class="hall" id="cat-basics" aria-labelledby="title-basics">
-    <header class="hall-head">
-      <p class="hall-index">01</p>
-      <h2 id="title-basics">基础概念</h2>
-      <p class="hall-lead">模型怎么挑下一个词、一次能看多少、聊长了又怎么把对话交下去。</p>
-    </header>
-    <div class="cards">
-      <a class="card" href="2026-10-19-llm-temperature.html">
-        <h3>AI 是怎么“说话”的？温度小实验</h3>
-        <p class="sum">温度是控制大模型按概率挑选下一个词时有多“随机”的参数：温度越低回答越保守稳定，越高越多样，也越容易跑偏。</p>
-        <p class="card-foot"><span class="date">2026-10-19</span><span class="go">动手玩 →</span></p>
-      </a>
-      <a class="card" href="2026-10-22-context-window.html">
-        <h3>上下文窗口是什么？AI 为什么聊着聊着就忘了</h3>
-        <p class="sum">上下文窗口是大模型一次能看到并参考的全部内容上限，用 token 计量。拖动窗口大小，亲手看看 AI 为什么会忘掉开头说过的话。</p>
-        <p class="card-foot"><span class="date">2026-10-22</span><span class="go">动手玩 →</span></p>
-      </a>
-      <a class="card" href="2026-10-26-context-compaction.html">
-        <h3>对话压缩（Compaction）是什么？长对话交接摘要</h3>
-        <p class="sum">对话压缩是把越来越长的聊天记录总结成交接摘要、替换旧消息，让 AI 在新的上下文里接着工作的方法。动手调压缩力度，看摘要留下了什么、丢了什么。</p>
-        <p class="card-foot"><span class="date">2026-10-26</span><span class="go">动手玩 →</span></p>
-      </a>
-    </div>
+<main>
+  <header class="hero wrap" id="top">
+    <h1>Shane的AI奇怪研究</h1>
+    <p class="subtitle">Independent AI Lab</p>
+    <p class="hero-line">把复杂的 AI 概念，变成可以亲手体验的小实验。</p>
+    <p class="by">作者：Shane</p>
+  </header>
+
+  <section class="section wrap" id="latest" aria-labelledby="latest-title">
+    <h2 id="latest-title">Latest</h2>
+    <p class="section-note">按发布日期从新到旧。同一天再按地址倒序，每次排序都一样。和最新一天同一天的作品标 NEW。这里先放 1 张大卡和 4 张小卡，其余在 Explore。</p>
+    <div class="bento" id="latest-root"></div>
   </section>
 
-  <section class="hall" id="cat-safety" aria-labelledby="title-safety">
-    <header class="hall-head">
-      <p class="hall-index">02</p>
-      <h2 id="title-safety">安全与风险</h2>
-      <p class="hall-lead">别人写进网页、邮件或文件里的话，怎样被 AI 当成命令。</p>
-    </header>
-    <div class="cards">
-      <a class="card" href="2026-10-20-prompt-injection.html">
-        <h3>AI 也会被“骗”？提示注入小实验</h3>
-        <p class="sum">提示注入是把恶意指令藏进网页、邮件或文件里，让读取这些内容的 AI 把它当成命令去执行的一种攻击方式。</p>
-        <p class="card-foot"><span class="date">2026-10-20</span><span class="go">动手玩 →</span></p>
-      </a>
-    </div>
+  <section class="section wrap" id="explore" aria-labelledby="explore-title">
+    <h2 id="explore-title">Explore</h2>
+    <p class="section-note">Explore the Lab。四个分类都在，标题、说明、日期和原来的互动页都还是那些。</p>
+    <div id="explore-root"></div>
   </section>
 
-  <section class="hall" id="cat-systems" aria-labelledby="title-systems">
-    <header class="hall-head">
-      <p class="hall-index">03</p>
-      <h2 id="title-systems">系统与应用</h2>
-      <p class="hall-lead">会自己用工具的智能体、先翻资料再回答，以及一条视频翻译配音流水线。</p>
-    </header>
-    <div class="cards">
-      <a class="card" href="2026-10-21-ai-agent.html">
-        <h3>AI 智能体是个啥？想→做→看 小实验</h3>
-        <p class="sum">AI 智能体是让大模型在“想 → 做 → 看”的循环里自己调用工具、根据结果决定下一步，直到完成任务的程序。</p>
-        <p class="card-foot"><span class="date">2026-10-21</span><span class="go">动手玩 →</span></p>
-      </a>
-      <a class="card" href="2026-10-23-retrieval-augmented-generation.html">
-        <h3>RAG 检索增强生成是什么？AI 的「开卷考试」</h3>
-        <p class="sum">RAG（检索增强生成）让大模型先从指定资料库里找出相关段落，再照着资料回答并标出处。切换闭卷/开卷、改一改资料，亲手看看 AI 怎么翻书答题。</p>
-        <p class="card-foot"><span class="date">2026-10-23</span><span class="go">动手玩 →</span></p>
-      </a>
-      <a class="card" href="2026-10-25-ai-video-dubbing.html">
-        <h3>AI 视频翻译配音是怎么做的？</h3>
-        <p class="sum">AI 视频翻译配音是先分离人声，再用语音识别把话转成带时间轴的文字，翻译后用语音合成读出来并对齐时长的一条流水线。动手走一遍流程，看噪音和语速怎么影响结果。</p>
-        <p class="card-foot"><span class="date">2026-10-25</span><span class="go">动手玩 →</span></p>
-      </a>
-      <a class="card" href="2026-10-28-text-to-video.html">
-        <h3>文字怎么变成视频？两条路一次看懂</h3>
-        <p class="sum">文字转视频有两条路：模板路线把文字套进做好的版式逐帧渲染，生成路线用扩散模型从噪点里一步步画出画面。</p>
-        <p class="card-foot"><span class="date">2026-10-28</span><span class="go">动手玩 →</span></p>
-      </a>
-      <a class="card" href="job-countdown/">
-        <h3>你的职业还剩几年？AI 替代倒计时</h3>
-        <p class="sum">挑一个常见职业，看浏览器里算出的倒计时，也可以截一张竖卡。这是一份估计，拿来好奇看看就好。</p>
-        <p class="card-foot"><span class="date">2026-10-28</span><span class="go">动手玩 →</span></p>
-      </a>
-    </div>
+  <section class="section wrap" id="projects" aria-labelledby="projects-title">
+    <h2 id="projects-title">Projects</h2>
+    <p class="section-note">Independent Projects。这些不是上面的教学小实验。</p>
+    <div class="projects" id="projects-root"></div>
   </section>
 
-  <section class="hall" id="cat-visibility" aria-labelledby="title-visibility">
-    <header class="hall-head">
-      <p class="hall-index">04</p>
-      <h2 id="title-visibility">可见与引用</h2>
-      <p class="hall-lead">网页怎样被 AI 搜索读懂并引用，生成的内容又怎样标明自己的身份。</p>
-    </header>
-    <div class="cards">
-      <a class="card" href="2026-10-24-generative-engine-optimization.html">
-        <h3>GEO 生成式引擎优化：网页怎样才会被 AI 引用？</h3>
-        <p class="sum">GEO（生成式引擎优化）是让网页内容更容易被 AI 搜索读懂、摘录并标为引用来源的写作和发布方法。动手给一段网页做 GEO 改造，看 AI 回答怎么变。</p>
-        <p class="card-foot"><span class="date">2026-10-24</span><span class="go">动手玩 →</span></p>
-      </a>
-      <a class="card" href="2026-10-27-ai-content-labeling.html">
-        <h3>AI 内容标识：明标给人看，暗标给机器查</h3>
-        <p class="sum">截图、裁剪、压缩一张 AI 图，看角标、元数据、隐形水印哪层先丢；再模拟发布看平台怎么提示</p>
-        <p class="card-foot"><span class="date">2026-10-27</span><span class="go">动手玩 →</span></p>
-      </a>
-    </div>
+  <section class="section wrap about" id="about" aria-labelledby="about-title">
+    <h2 id="about-title">About</h2>
+    <p>Shane 把难讲的 AI 概念做成能动手的小实验，也把能独立完成的工具留在公开仓库里。常做的事包括 AI 应用、Agent、RAG、产品设计、自动化，以及一个人把想法收成独立产品。</p>
   </section>
 
-  <section class="hall" id="plugins" aria-labelledby="title-plugins">
-    <div class="plugin-board">
-      <header class="hall-head">
-        <p class="hall-index">简介</p>
-        <h2 id="title-plugins">插件简介</h2>
-        <p class="hall-lead">这里只做短简介。公开的独立项目会在新标签打开它自己的仓库；还没公开的只留联系方式，没有下载链接。</p>
-      </header>
-      <div class="cards">
-        <article class="plugin">
-          <p class="badge badge-private">未公开 · 浏览器扩展</p>
-          <h3>AI研究</h3>
-          <p class="blurb">浏览器扩展。这一版还没有公开，页面上不提供下载。</p>
-          <p class="contact" id="plugin-contact">联系我：小红书私信「珊哥爱读书」</p>
-        </article>
-        <article class="plugin">
-          <p class="badge badge-independent">独立项目</p>
-          <h3>GEO 检查器</h3>
-          <p class="blurb">独立项目，不在本展厅仓库里，也不是上面的 GEO 小实验。代码和说明在它自己的 GitHub 仓库。</p>
-          <a class="repo-link" href="https://github.com/2045shane/geo-checker" target="_blank" rel="noopener noreferrer">
-            打开独立仓库 ↗
-            <span class="repo-url">github.com/2045shane/geo-checker</span>
-          </a>
-        </article>
-      </div>
-    </div>
+  <section class="section wrap contact-block" id="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Contact</h2>
+    <p>想聊聊这些实验，用下面两种方式就行。</p>
+    <ul class="contact-list">
+      <li class="contact-line">联系我：小红书私信「珊哥爱读书」</li>
+      <li><a href="https://github.com/2045shane" target="_blank" rel="noopener noreferrer">https://github.com/2045shane</a></li>
+    </ul>
   </section>
 </main>
 
-<footer class="colophon frame" id="about">
-  <p class="byline">作者：Shane</p>
-  <p class="note" id="site-note">所有实验都是用规则写的模拟演示，不连接真实大模型，也不收集任何数据。</p>
+<footer class="foot wrap">
+  <p>作者：Shane</p>
+  <p>所有实验都是用规则写的模拟演示，不连接真实大模型，也不收集任何数据。</p>
 </footer>
+<script src="assets/lab.js"></script>
 </body>
 </html>

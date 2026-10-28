@@ -10,8 +10,10 @@
 
 | 文件 | 说明 |
 |---|---|
-| `index.html` | 首页展厅：按四个分类展示全部小实验，并有独立的插件简介区 |
-| `assets/gallery.css` | 首页展厅样式（只给首页用） |
+| `index.html` | 首页：深色个人 AI 实验室。内容来自 `data/catalog.json` |
+| `data/catalog.json` | 作品数据：`title`、`description`、`date`、`category`、`url`、`type`、`cover` |
+| `assets/lab.css`、`assets/lab.js` | 首页样式和渲染（只给首页用） |
+| `job-countdown/` | 职业倒计时试水页 |
 | `2026-10-19-llm-temperature.html` | AI 是怎么“说话”的？温度小实验 |
 | `2026-10-20-prompt-injection.html` | AI 也会被“骗”？提示注入小实验 |
 | `2026-10-21-ai-agent.html` | AI 智能体是个啥？想→做→看 小实验 |
@@ -59,11 +61,24 @@
 sed -i '' 's#2045shane.github.io/ai-demos/#2045shane.github.io/新仓库名/#g' sitemap.xml robots.txt index.html *.html
 ```
 
-## 以后再加新页面
+## 以后再加作品
 
-1. 把新页面按 `YYYY-MM-DD-英文短横线.html` 命名，放进仓库根目录。
-2. 在 `index.html` 对应分类的卡片区里加一张卡片，写上链接、日期、标题和一句话。新实验要落进已有分类，不要再排成一条按日期的总列表。
-3. 在 `sitemap.xml` 里加一行 `<url>`。
+实验页、职业倒计时这类站内作品，和 GEO 检查器这类独立项目，都写在 `data/catalog.json`，首页用它来排 Latest、Explore 和 Projects。
+
+1. 站内实验：按 `YYYY-MM-DD-英文短横线.html` 放进仓库根目录（或像 `job-countdown/` 这样的目录）。
+2. 在 `data/catalog.json` 的 `works` 里加一条，填这些字段：
+   - `title`：卡片标题
+   - `description`：一句说明
+   - `date`：真实发布日，`YYYY-MM-DD`
+   - `category`：只能是 `基础概念`、`安全与风险`、`系统与应用`、`可见与引用` 之一
+   - `url`：相对路径，例如 `2026-10-19-llm-temperature.html` 或 `job-countdown/`
+   - `type`：`experiment`
+   - `cover`：可选，对应首页里已有的轻量封面名（如 `bars`、`clock`）；不认识就用默认图形
+3. 独立项目写在 `projects`：同样带 `title`、`description`、`url`、`type`（`project`）。公开仓库用完整 `https://github.com/...`，页面会新标签打开。还没公开、没有下载地址的，把 `url` 留空，并写上真实的 `contact`，不要编造邮箱。
+4. 在 `sitemap.xml` 加一行 `<url>`，`loc` 用 `https://2045shane.github.io/ai-demos/` 加上相对路径，`lastmod` 用发布日。首页改了的话，也把首页那条 `lastmod` 改成当天。
+5. `robots.txt` 已经指向这份 sitemap，一般不用改。首页 `<link rel="canonical">` 仍是 `https://2045shane.github.io/ai-demos/`。推到 `main` 后，IndexNow 工作流会把这次改过的 HTML（含首页）提交给 Bing 等，不用另配密钥。
+
+Latest 的排序：日期从新到旧；同一天按 `url` 倒序，结果是稳定的。和数据里最新一天同一天的作品显示 NEW。大卡是排第一的那条，后面再显示 4 张小卡。
 
 ## 之后可选：Google Search Console（免费）
 
