@@ -1,0 +1,127 @@
+{
+  "works": [
+    {
+      "title": "AI 是怎么“说话”的？温度小实验",
+      "description": "温度是控制大模型按概率挑选下一个词时有多“随机”的参数：温度越低回答越保守稳定，越高越多样，也越容易跑偏。",
+      "date": "2026-10-19",
+      "category": "基础概念",
+      "url": "2026-10-19-llm-temperature.html",
+      "type": "experiment",
+      "cover": "bars"
+    },
+    {
+      "title": "AI 也会被“骗”？提示注入小实验",
+      "description": "提示注入是把恶意指令藏进网页、邮件或文件里，让读取这些内容的 AI 把它当成命令去执行的一种攻击方式。",
+      "date": "2026-10-20",
+      "category": "安全与风险",
+      "url": "2026-10-20-prompt-injection.html",
+      "type": "experiment",
+      "cover": "shield"
+    },
+    {
+      "title": "AI 智能体是个啥？想→做→看 小实验",
+      "description": "AI 智能体是让大模型在“想 → 做 → 看”的循环里自己调用工具、根据结果决定下一步，直到完成任务的程序。",
+      "date": "2026-10-21",
+      "category": "系统与应用",
+      "url": "2026-10-21-ai-agent.html",
+      "type": "experiment",
+      "cover": "loop"
+    },
+    {
+      "title": "上下文窗口是什么？AI 为什么聊着聊着就忘了",
+      "description": "上下文窗口是大模型一次能看到并参考的全部内容上限，用 token 计量。拖动窗口大小，亲手看看 AI 为什么会忘掉开头说过的话。",
+      "date": "2026-10-22",
+      "category": "基础概念",
+      "url": "2026-10-22-context-window.html",
+      "type": "experiment",
+      "cover": "window"
+    },
+    {
+      "title": "RAG 检索增强生成是什么？AI 的「开卷考试」",
+      "description": "RAG（检索增强生成）让大模型先从指定资料库里找出相关段落，再照着资料回答并标出处。切换闭卷/开卷、改一改资料，亲手看看 AI 怎么翻书答题。",
+      "date": "2026-10-23",
+      "category": "系统与应用",
+      "url": "2026-10-23-retrieval-augmented-generation.html",
+      "type": "experiment",
+      "cover": "book"
+    },
+    {
+      "title": "GEO 生成式引擎优化：网页怎样才会被 AI 引用？",
+      "description": "GEO（生成式引擎优化）是让网页内容更容易被 AI 搜索读懂、摘录并标为引用来源的写作和发布方法。动手给一段网页做 GEO 改造，看 AI 回答怎么变。",
+      "date": "2026-10-24",
+      "category": "可见与引用",
+      "url": "2026-10-24-generative-engine-optimization.html",
+      "type": "experiment",
+      "cover": "quote"
+    },
+    {
+      "title": "AI 视频翻译配音是怎么做的？",
+      "description": "AI 视频翻译配音是先分离人声，再用语音识别把话转成带时间轴的文字，翻译后用语音合成读出来并对齐时长的一条流水线。动手走一遍流程，看噪音和语速怎么影响结果。",
+      "date": "2026-10-25",
+      "category": "系统与应用",
+      "url": "2026-10-25-ai-video-dubbing.html",
+      "type": "experiment",
+      "cover": "wave"
+    },
+    {
+      "title": "对话压缩（Compaction）是什么？长对话交接摘要",
+      "description": "对话压缩是把越来越长的聊天记录总结成交接摘要、替换旧消息，让 AI 在新的上下文里接着工作的方法。动手调压缩力度，看摘要留下了什么、丢了什么。",
+      "date": "2026-10-26",
+      "category": "基础概念",
+      "url": "2026-10-26-context-compaction.html",
+      "type": "experiment",
+      "cover": "stack"
+    },
+    {
+      "title": "AI 内容标识：明标给人看，暗标给机器查",
+      "description": "截图、裁剪、压缩一张 AI 图，看角标、元数据、隐形水印哪层先丢；再模拟发布看平台怎么提示",
+      "date": "2026-10-27",
+      "category": "可见与引用",
+      "url": "2026-10-27-ai-content-labeling.html",
+      "type": "experiment",
+      "cover": "tag"
+    },
+    {
+      "title": "文字怎么变成视频？两条路一次看懂",
+      "description": "文字转视频有两条路：模板路线把文字套进做好的版式逐帧渲染，生成路线用扩散模型从噪点里一步步画出画面。",
+      "date": "2026-10-28",
+      "category": "系统与应用",
+      "url": "2026-10-28-text-to-video.html",
+      "type": "experiment",
+      "cover": "film"
+    },
+    {
+      "title": "你的职业还剩几年？AI 替代倒计时",
+      "description": "挑一个常见职业，看浏览器里算出的倒计时，也可以截一张竖卡。这是一份估计，拿来好奇看看就好。",
+      "date": "2026-10-28",
+      "category": "系统与应用",
+      "url": "job-countdown/",
+      "type": "experiment",
+      "cover": "clock"
+    }
+  ],
+  "projects": [
+    {
+      "title": "GEO 检查器",
+      "description": "独立项目，不在本实验室仓库里，也不是上面的 GEO 小实验。代码和说明在它自己的 GitHub 仓库。",
+      "date": "",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/geo-checker",
+      "type": "project",
+      "cover": "check",
+      "external": true,
+      "label": "独立项目"
+    },
+    {
+      "title": "AI研究",
+      "description": "浏览器扩展。这一版还没有公开，页面上不提供下载。",
+      "date": "",
+      "category": "未公开",
+      "url": "",
+      "type": "project",
+      "cover": "plug",
+      "label": "未公开 · 浏览器扩展",
+      "contact": "联系我：小红书私信「珊哥爱读书」"
+    }
+  ]
+}
