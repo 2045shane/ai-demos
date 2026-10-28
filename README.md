@@ -1,6 +1,6 @@
-# AI替我说 · AI 互动小实验（GitHub Pages 网页包）
+# Shane的AI奇怪研究（GitHub Pages 网页包）
 
-这是「AI替我说」小红书每天配套的 AI 科普互动小网页合集。打包日期是 2026-10-26，全部是纯静态 HTML，不需要构建，GitHub Pages 免费托管就能用。
+这是 Shane 的公开 AI 作品橱窗：互动小实验、独立工具外链和插件简介。打包日期是 2026-10-26，全部是纯静态 HTML，不需要构建，GitHub Pages 免费托管就能用。
 
 - 你已经有的仓库：<https://github.com/2045shane/ai-demos>（公开仓库，Pages 已开启）
 - 网站地址：<https://2045shane.github.io/ai-demos/>
@@ -99,4 +99,4 @@ curl -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/j
 }'
 ```
 
-作者：AI替我说
+作者：Shane
