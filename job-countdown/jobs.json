@@ -1,0 +1,173 @@
+{
+  "baseline": "2026-10-28",
+  "jobs": [
+    {
+      "id": "delivery-rider",
+      "name": "外卖骑手",
+      "years_until": 18,
+      "reason": "楼栋、小区和临时路况，最后一段仍要人跑。",
+      "impact": "相对受保护"
+    },
+    {
+      "id": "ride-hailing-driver",
+      "name": "网约车司机",
+      "years_until": 12,
+      "reason": "少数城市有无人车试点，全国少雇司机还早。",
+      "impact": "缩编"
+    },
+    {
+      "id": "bank-teller",
+      "name": "银行柜员",
+      "years_until": 4,
+      "reason": "柜台业务继续进手机银行，网点还会减人。",
+      "impact": "缩编"
+    },
+    {
+      "id": "phone-support",
+      "name": "电话客服",
+      "years_until": 2.5,
+      "reason": "标准问答和回访，语音机器人已经能先接住。",
+      "impact": "替代"
+    },
+    {
+      "id": "ecommerce-support",
+      "name": "电商客服",
+      "years_until": 2,
+      "reason": "售前售后话术很固定，机器能挡住大部分咨询。",
+      "impact": "替代"
+    },
+    {
+      "id": "data-labeler",
+      "name": "数据标注员",
+      "years_until": 4.5,
+      "reason": "简单框选和分类，会越来越多被模型自己标完。",
+      "impact": "缩编"
+    },
+    {
+      "id": "bookkeeping-accountant",
+      "name": "会计（基础核算）",
+      "years_until": 5,
+      "reason": "记账、对账、做凭证这类重复核算最先被软件吃掉。",
+      "impact": "缩编"
+    },
+    {
+      "id": "general-translator",
+      "name": "翻译（通用文本）",
+      "years_until": 2,
+      "reason": "通用书面稿常常机器先出，人只做抽查和润色。",
+      "impact": "替代"
+    },
+    {
+      "id": "social-copywriter",
+      "name": "新媒体文案",
+      "years_until": 3.5,
+      "reason": "日常标题和推文能批量生成，写稿编制会收一截。",
+      "impact": "缩编"
+    },
+    {
+      "id": "ecommerce-ops",
+      "name": "电商运营",
+      "years_until": 8,
+      "reason": "选品和投放能被帮忙，店铺和活动仍要人负责。",
+      "impact": "AI 辅助"
+    },
+    {
+      "id": "short-video-editor",
+      "name": "短视频剪辑",
+      "years_until": 4,
+      "reason": "口播切片、字幕和包装，粗剪已经能自动出。",
+      "impact": "缩编"
+    },
+    {
+      "id": "jewelry-sales",
+      "name": "珠宝门店销售",
+      "years_until": 16,
+      "reason": "高价货要当面看、当面谈，到店成交难被拿走。",
+      "impact": "相对受保护"
+    },
+    {
+      "id": "property-agent",
+      "name": "房产中介",
+      "years_until": 6.5,
+      "reason": "匹配房源和约带看会更自动，成交岗位会变少。",
+      "impact": "缩编"
+    },
+    {
+      "id": "insurance-agent",
+      "name": "保险代理人",
+      "years_until": 7,
+      "reason": "产品讲解能被助手代说，只靠话术的增员会减少。",
+      "impact": "缩编"
+    },
+    {
+      "id": "k12-teacher",
+      "name": "中小学学科教师",
+      "years_until": 20,
+      "reason": "看班、德育和当面上课，学校短期内仍要真人。",
+      "impact": "相对受保护"
+    },
+    {
+      "id": "crud-programmer",
+      "name": "程序员（CRUD/业务）",
+      "years_until": 5.5,
+      "reason": "增删改查和业务胶水代码，更少的人就能做完。",
+      "impact": "缩编"
+    },
+    {
+      "id": "ui-designer",
+      "name": "UI 设计师",
+      "years_until": 6,
+      "reason": "常规界面出图变快，只负责画页面的编制会收。",
+      "impact": "缩编"
+    },
+    {
+      "id": "legal-assistant",
+      "name": "律师助理",
+      "years_until": 4.5,
+      "reason": "检索、摘录和格式文书会先交给工具，助理岗变瘦。",
+      "impact": "缩编"
+    },
+    {
+      "id": "radiology-assist",
+      "name": "放射影像初步读片辅助岗",
+      "years_until": 5,
+      "reason": "初筛和标出疑点，正是影像辅助软件已经在做的。",
+      "impact": "替代"
+    },
+    {
+      "id": "warehouse-sorter",
+      "name": "仓储分拣员",
+      "years_until": 8.5,
+      "reason": "大仓分拣继续上机器，小仓和异形件暂时还要人。",
+      "impact": "缩编"
+    },
+    {
+      "id": "cafe-staff",
+      "name": "咖啡店店员",
+      "years_until": 15,
+      "reason": "现做饮品、高峰出杯和店里接待，还是靠人。",
+      "impact": "相对受保护"
+    },
+    {
+      "id": "livestream-host",
+      "name": "主播（带货口播）",
+      "years_until": 3.5,
+      "reason": "话术固定的口播间，已经有数字人在顶班。",
+      "impact": "缩编"
+    },
+    {
+      "id": "hr-recruiter",
+      "name": "HR 招聘专员",
+      "years_until": 6,
+      "reason": "筛简历和约面试会被系统接走，招聘岗会变瘦。",
+      "impact": "缩编"
+    },
+    {
+      "id": "prompt-engineer",
+      "name": "提示词工程师",
+      "years_until": 3,
+      "reason": "写提示会收进产品和本职，单独这个岗难长期留。",
+      "impact": "缩编"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>这个岗位大概何时会少招人？ · AI替我说</title>
+<meta name="description" content="选一个中国常见职业，看浏览器里的倒计时。数字是 AI 一次性估计，不是真实就业预测。">
+<meta name="author" content="AI替我说">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="frame">
+  <p class="back"><a href="../index.html">← 返回展厅</a></p>
+  <p class="eyebrow">AI替我说 · 试水</p>
+  <h1>这个岗位，大概何时会少招人？</h1>
+  <p class="lede">从 24 个中国常见职业里选一个，或搜名字。倒计时在你的浏览器里算，打开页面不会调用模型。</p>
+
+  <section class="disclaimer" id="disclaimer">
+    <p>这是 AI 一次性估计，不是真实就业预测，也不代表官方统计或任何公司的招聘计划。</p>
+    <p>年数的意思：雇主大概何时会明显少招这个岗位。不是某个人哪天失业，也没有准确率。</p>
+  </section>
+
+  <label class="search" for="q">搜索或点选职业
+    <input id="q" type="search" placeholder="例如：客服、教师、会计" autocomplete="off">
+  </label>
+  <p class="meta-line" id="shown">正在载入职业表…</p>
+  <ul class="jobs" id="jobs" role="listbox" aria-label="职业"></ul>
+  <p class="empty" id="empty" hidden>没有匹配的职业，换个词试试。</p>
+
+  <section class="result" id="result" hidden>
+    <p class="badge" id="impact"></p>
+    <h2 id="job-name"></h2>
+    <p class="reason" id="reason"></p>
+    <p class="estimate" id="estimate"></p>
+    <p class="live" id="live">还剩 <span id="y">0</span> 年 <span id="m">0</span> 个月 <span id="d">0</span> 天<span class="clock" id="clock">00:00:00</span></p>
+    <p class="shot-hint">下面这张竖卡大约 3:4，对着它截图就能发。</p>
+    <article class="share" id="share-card">
+      <p class="share-brand">AI替我说 · 职业倒计时</p>
+      <h3 class="share-name" id="card-name"></h3>
+      <p class="share-kicker">还剩</p>
+      <p class="share-years"><b id="card-y">0</b><span class="share-unit">年</span></p>
+      <p class="share-sub"><span id="card-m">0</span> 个月 · <span id="card-d">0</span> 天</p>
+      <p class="share-clock" id="card-clock">00:00:00</p>
+      <p class="share-impact" id="card-impact"></p>
+      <p class="share-note">AI 估计，不是真实就业预测。</p>
+    </article>
+  </section>
+
+  <details class="method">
+    <summary>这些年数怎么算</summary>
+    <p>基准日写在 <code>jobs.json</code> 里，是 2026-10-28。每个职业有一个 <code>years_until</code>，按 0.5 年一档，上限 30 年。终点 = 基准日加上整年；如果是 x.5，再加 6 个月。页面每秒用你电脑上的时间，减去这个终点，得到年、月、日和时分秒。</p>
+    <p>标签只是便于阅读：替代，是常规工作能被工具直接接走；缩编，是岗位还在但用不了那么多人；AI 辅助，是人仍要在岗、工具主要帮忙；相对受保护，是到店、到场、看护这类短期仍要真人的场景。</p>
+    <p>理由和年数是 2026-10-28 一次性写进静态文件的估计，之后不会再请求模型。不要把它当成求职、跳槽或裁员建议。</p>
+  </details>
+
+  <p class="foot">作者：AI替我说 · 2026-10-28 · 规则在浏览器里跑，不收集你选了哪个职业。</p>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
