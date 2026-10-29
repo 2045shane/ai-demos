@@ -97,13 +97,14 @@
       "category": "系统与应用",
       "url": "job-countdown/",
       "type": "experiment",
-      "cover": "clock"
+      "cover": "clock",
+      "section": "play"
     }
   ],
   "projects": [
     {
       "title": "GEO 检查器",
-      "description": "独立项目，不在本实验室仓库里，也不是上面的 GEO 小实验。代码和说明在它自己的 GitHub 仓库。",
+      "description": "独立项目，不在本实验室仓库里，也不是教学里的 GEO 小实验。代码和说明在它自己的 GitHub 仓库。",
       "date": "",
       "category": "独立项目",
       "url": "https://github.com/2045shane/geo-checker",

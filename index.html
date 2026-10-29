@@ -11,16 +11,16 @@
 <link rel="stylesheet" href="assets/lab.css">
 </head>
 <body>
-<a class="skip" href="#latest">跳到 Latest</a>
+<a class="skip" href="#plugins">跳到插件</a>
 <header class="nav wrap">
   <a class="brand" href="./"><span>SHANE</span><span class="slash">/</span><span>AI LAB</span></a>
   <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
   <ul class="nav-links" id="site-nav">
-    <li><a href="#latest">Latest</a></li>
-    <li><a href="#explore">Explore</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#plugins">插件</a></li>
+    <li><a href="#learn">教学</a></li>
+    <li><a href="#play">好玩</a></li>
+    <li><a href="#about">关于</a></li>
+    <li><a href="#contact">联系我</a></li>
   </ul>
 </header>
 
@@ -32,31 +32,32 @@
     <p class="by">作者：Shane</p>
   </header>
 
-  <section class="section wrap" id="latest" aria-labelledby="latest-title">
-    <h2 id="latest-title">Latest</h2>
-    <p class="section-note">按发布日期从新到旧。同一天再按地址倒序，每次排序都一样。和最新一天同一天的作品标 NEW。这里先放 1 张大卡和 4 张小卡，其余在 Explore。</p>
-    <div class="bento" id="latest-root"></div>
+  <section class="section wrap" id="plugins" aria-labelledby="plugins-title">
+    <h2 id="plugins-title">插件</h2>
+    <p class="section-note">这些不是下面的教学小实验。公开的在各自的 GitHub 仓库；还没公开的不提供下载。</p>
+    <div class="projects" id="plugins-root"></div>
   </section>
 
-  <section class="section wrap" id="explore" aria-labelledby="explore-title">
-    <h2 id="explore-title">Explore</h2>
-    <p class="section-note">Explore the Lab。四个分类都在，标题、说明、日期和原来的互动页都还是那些。</p>
-    <div id="explore-root"></div>
+  <section class="section wrap" id="learn" aria-labelledby="learn-title">
+    <h2 id="learn-title">教学</h2>
+    <p class="section-note">四个分类都在，标题、说明、日期和原来的互动页都还是那些。最上面一张是教学里日期最新的一条。</p>
+    <div class="featured" id="learn-featured"></div>
+    <div id="learn-root"></div>
   </section>
 
-  <section class="section wrap" id="projects" aria-labelledby="projects-title">
-    <h2 id="projects-title">Projects</h2>
-    <p class="section-note">Independent Projects。这些不是上面的教学小实验。</p>
-    <div class="projects" id="projects-root"></div>
+  <section class="section wrap" id="play" aria-labelledby="play-title">
+    <h2 id="play-title">好玩</h2>
+    <p class="section-note">可以玩的小页面放这里。职业倒计时不再归在教学里。</p>
+    <div class="grid" id="play-root"></div>
   </section>
 
   <section class="section wrap about" id="about" aria-labelledby="about-title">
-    <h2 id="about-title">About</h2>
+    <h2 id="about-title">关于</h2>
     <p>Shane 把难讲的 AI 概念做成能动手的小实验，也把能独立完成的工具留在公开仓库里。常做的事包括 AI 应用、Agent、RAG、产品设计、自动化，以及一个人把想法收成独立产品。</p>
   </section>
 
   <section class="section wrap contact-block" id="contact" aria-labelledby="contact-title">
-    <h2 id="contact-title">Contact</h2>
+    <h2 id="contact-title">联系我</h2>
     <p>想聊聊这些实验，用下面两种方式就行。</p>
     <ul class="contact-list">
       <li class="contact-line">联系我：小红书私信「珊哥爱读书」</li>
@@ -69,6 +70,7 @@
   <p>作者：Shane</p>
   <p>所有实验都是用规则写的模拟演示，不连接真实大模型，也不收集任何数据。</p>
 </footer>
+<script src="assets/ia.js"></script>
 <script src="assets/lab.js"></script>
 </body>
 </html>
