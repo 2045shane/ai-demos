@@ -248,6 +248,10 @@ a { color: inherit; }
   font-weight: 700;
 }
 
+.featured { margin: 0 0 22px; }
+
+.featured .tile-feature { max-width: 720px; }
+
 .cat { margin: 0 0 22px; }
 
 .cat h3 {

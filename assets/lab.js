@@ -3,7 +3,7 @@
   const LEADS = {
     "基础概念": "模型怎么挑下一个词、一次能看多少、聊长了又怎么把对话交下去。",
     "安全与风险": "别人写进网页、邮件或文件里的话，怎样被 AI 当成命令。",
-    "系统与应用": "智能体、检索、配音、文字变视频，以及一份职业倒计时。",
+    "系统与应用": "智能体、检索、配音，以及文字怎样变成视频。",
     "可见与引用": "网页怎样被 AI 搜索读懂并引用，生成的内容又怎样标明自己的身份。"
   };
 
@@ -39,13 +39,7 @@
     return box;
   }
 
-  function byNewest(a, b) {
-    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
-    if (a.url !== b.url) return a.url < b.url ? 1 : -1;
-    return 0;
-  }
-
-  function experimentCard(work, featured, newestDate) {
+  function experimentCard(work, featured, newestDate, cta) {
     const link = document.createElement("a");
     link.className = featured ? "tile tile-feature" : "tile";
     link.href = work.url;
@@ -53,44 +47,50 @@
     const meta = el("div", "meta");
     meta.append(el("span", "pill", work.category));
     meta.append(el("span", null, work.date));
-    if (work.date === newestDate) meta.append(el("span", "pill pill-new", "NEW"));
+    if (featured && work.date === newestDate) meta.append(el("span", "pill pill-new", "最新"));
     link.append(meta);
     link.append(el("h3", null, work.title));
     link.append(el("p", null, work.description));
-    link.append(el("span", "go", "打开实验 →"));
+    link.append(el("span", "go", cta));
     return link;
   }
 
-  function renderLatest(works) {
-    const sorted = works.slice().sort(byNewest);
-    const newestDate = sorted.length ? sorted[0].date : "";
-    const root = $("latest-root");
-    root.replaceChildren();
-    sorted.slice(0, 5).forEach((work, index) => {
-      root.append(experimentCard(work, index === 0, newestDate));
-    });
-  }
+  function renderLearn(works) {
+    const learn = LabIA.learnWorks(works);
+    const featured = LabIA.pickFeatured(works);
+    const featuredRoot = $("learn-featured");
+    featuredRoot.replaceChildren();
+    if (featured) featuredRoot.append(experimentCard(featured, true, featured.date, "打开实验 →"));
 
-  function renderExplore(works) {
-    const root = $("explore-root");
+    const root = $("learn-root");
     root.replaceChildren();
     CATS.forEach((cat) => {
+      const items = learn
+        .filter((work) => work.category === cat)
+        .slice()
+        .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+      if (!items.length) return;
       const block = el("section", "cat");
       block.append(el("h3", null, cat));
       block.append(el("p", "cat-lead", LEADS[cat] || ""));
       const grid = el("div", "grid");
-      works
-        .filter((work) => work.category === cat)
-        .slice()
-        .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
-        .forEach((work) => grid.append(experimentCard(work, false, "")));
+      items.forEach((work) => grid.append(experimentCard(work, false, "", "打开实验 →")));
       block.append(grid);
       root.append(block);
     });
   }
 
-  function renderProjects(projects) {
-    const root = $("projects-root");
+  function renderPlay(works) {
+    const root = $("play-root");
+    root.replaceChildren();
+    LabIA.playWorks(works)
+      .slice()
+      .sort(LabIA.compareNewest)
+      .forEach((work) => root.append(experimentCard(work, false, "", "打开 →")));
+  }
+
+  function renderPlugins(projects) {
+    const root = $("plugins-root");
     root.replaceChildren();
     projects.forEach((item) => {
       const card = el("article", "project");
@@ -98,7 +98,7 @@
       if (item.label) card.append(el("p", "pill", item.label));
       card.append(el("h3", null, item.title));
       card.append(el("p", null, item.description));
-      if (item.url) {
+      if (LabIA.pluginOffersDownload(item)) {
         const a = document.createElement("a");
         a.className = "ext";
         a.href = item.url;
@@ -111,6 +111,13 @@
       }
       if (item.contact) card.append(el("p", "contact-line", item.contact));
       root.append(card);
+    });
+  }
+
+  function showLoadError() {
+    ["plugins-root", "learn-featured", "learn-root", "play-root"].forEach((id) => {
+      const node = $(id);
+      if (node) node.append(el("p", "status", "作品表没有载入。请用网站方式打开本页。"));
     });
   }
 
@@ -136,11 +143,9 @@
     })
     .then((data) => {
       const works = (data.works || []).filter((item) => item.type === "experiment");
-      renderLatest(works);
-      renderExplore(works);
-      renderProjects(data.projects || []);
+      renderPlugins(data.projects || []);
+      renderLearn(works);
+      renderPlay(works);
     })
-    .catch(() => {
-      $("latest-root").append(el("p", "status", "作品表没有载入。请用网站方式打开本页。"));
-    });
+    .catch(showLoadError);
 })();

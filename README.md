@@ -10,8 +10,10 @@
 
 | 文件 | 说明 |
 |---|---|
-| `index.html` | 首页：深色个人 AI 实验室。内容来自 `data/catalog.json` |
-| `data/catalog.json` | 作品数据：`title`、`description`、`date`、`category`、`url`、`type`、`cover` |
+| `index.html` | 首页：深色个人 AI 实验室。顺序是 Hero、插件、教学、好玩、关于、联系我。内容来自 `data/catalog.json` |
+| `docs/FEATURE-MAP.md` | 导航、区块、catalog 字段和渲染路径 |
+| `data/catalog.json` | 作品数据：`title`、`description`、`date`、`category`、`url`、`type`、`cover`；实验可加 `section`（`learn` 或 `play`，缺省是 `learn`） |
+| `tests/ia-check.mjs` | `npm test`：锁住导航文案、区块顺序、learn/play 划分和旧页可访问 |
 | `assets/lab.css`、`assets/lab.js` | 首页样式和渲染（只给首页用） |
 | `job-countdown/` | 职业倒计时试水页 |
 | `2026-10-19-llm-temperature.html` | AI 是怎么“说话”的？温度小实验 |
@@ -63,9 +65,9 @@ sed -i '' 's#2045shane.github.io/ai-demos/#2045shane.github.io/新仓库名/#g' 
 
 ## 以后再加作品
 
-实验页、职业倒计时这类站内作品，和 GEO 检查器这类独立项目，都写在 `data/catalog.json`，首页用它来排 Latest、Explore 和 Projects。
+实验页、好玩页面和插件外链都写在 `data/catalog.json`。首页顺序是 Hero → 插件 → 教学 → 好玩 → 关于 → 联系我。字段和渲染路径见 `docs/FEATURE-MAP.md`。
 
-1. 站内实验：按 `YYYY-MM-DD-英文短横线.html` 放进仓库根目录（或像 `job-countdown/` 这样的目录）。
+1. 站内实验：按 `YYYY-MM-DD-英文短横线.html` 放进仓库根目录。好玩页面可以像 `job-countdown/` 这样放一个目录。
 2. 在 `data/catalog.json` 的 `works` 里加一条，填这些字段：
    - `title`：卡片标题
    - `description`：一句说明
@@ -73,12 +75,15 @@ sed -i '' 's#2045shane.github.io/ai-demos/#2045shane.github.io/新仓库名/#g' 
    - `category`：只能是 `基础概念`、`安全与风险`、`系统与应用`、`可见与引用` 之一
    - `url`：相对路径，例如 `2026-10-19-llm-temperature.html` 或 `job-countdown/`
    - `type`：`experiment`
+   - `section`：`learn`（教学，可省略）或 `play`（好玩）。职业倒计时是 `play`，地址仍是 `job-countdown/`
    - `cover`：可选，对应首页里已有的轻量封面名（如 `bars`、`clock`）；不认识就用默认图形
-3. 独立项目写在 `projects`：同样带 `title`、`description`、`url`、`type`（`project`）。公开仓库用完整 `https://github.com/...`，页面会新标签打开。还没公开、没有下载地址的，把 `url` 留空，并写上真实的 `contact`，不要编造邮箱。
-4. 在 `sitemap.xml` 加一行 `<url>`，`loc` 用 `https://2045shane.github.io/ai-demos/` 加上相对路径，`lastmod` 用发布日。首页改了的话，也把首页那条 `lastmod` 改成当天。
-5. `robots.txt` 已经指向这份 sitemap，一般不用改。首页 `<link rel="canonical">` 仍是 `https://2045shane.github.io/ai-demos/`。推到 `main` 后，IndexNow 工作流会把这次改过的 HTML（含首页）提交给 Bing 等，不用另配密钥。
+3. 插件写在 `projects`：同样带 `title`、`description`、`url`、`type`（`project`）。公开仓库用完整 `https://github.com/...`，页面会新标签打开。现有地址不要改：GEO 检查器、YouTube 公开评论导出、网页表格导出、长页存档。还没公开、没有下载地址的（现在是「AI研究」），把 `url` 留空，并写上真实的 `contact`，不要编造邮箱。
+4. 小红书互动课：只有已经有站内页或真实外链时才加进 `works`。没有就不要造一条空卡。
+5. 在 `sitemap.xml` 加一行 `<url>`，`loc` 用 `https://2045shane.github.io/ai-demos/` 加上相对路径，`lastmod` 用发布日。首页改了的话，也把首页那条 `lastmod` 改成当天。
+6. `robots.txt` 已经指向这份 sitemap，一般不用改。首页 `<link rel="canonical">` 仍是 `https://2045shane.github.io/ai-demos/`。推到 `main` 后，IndexNow 工作流会把这次改过的 HTML（含首页）提交给 Bing 等，不用另配密钥。
+7. 改完跑 `npm test`。它检查导航文案、区块顺序，以及旧实验页还在。
 
-Latest 的排序：日期从新到旧；同一天按 `url` 倒序，结果是稳定的。和数据里最新一天同一天的作品显示 NEW。大卡是排第一的那条，后面再显示 4 张小卡。
+教学顶部最多 1 张大卡：从 `section` 不是 `play` 的实验里，按日期从新到旧取第一条；同一天按 `url` 倒序。这张卡仍留在自己的分类里。没有单独的 Latest 整段。
 
 ## 之后可选：Google Search Console（免费）
 
