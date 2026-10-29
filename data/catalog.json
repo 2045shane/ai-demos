@@ -124,6 +124,17 @@
       "label": "独立项目 · 浏览器扩展"
     },
     {
+      "title": "网页表格导出",
+      "description": "Chrome 扩展：把页面可见表格（含常见后台表格 DOM）导出为 CSV / Excel（.xlsx）；本地每日免费 3 次；无 API key。有问题请联系我：小红书私信「珊哥爱读书」。安装与用法见 GitHub README。",
+      "date": "2026-10-29",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/web-table-export",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
       "title": "长页存档",
       "description": "本地优先 Chrome 扩展：网页导出 PNG·PDF·Markdown·ZIP（长图、A4 PDF、Markdown 或离线 ZIP）；无 AI API。安装与用法见 GitHub README。A local-first Chrome extension that exports a full webpage as a PNG, paginated A4 PDF, editable Markdown, or an offline Markdown ZIP with local images.",
       "date": "2026-10-28",
