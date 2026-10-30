@@ -89,6 +89,23 @@
       .forEach((work) => root.append(experimentCard(work, false, "", "打开 →")));
   }
 
+  function renderNews(data) {
+    const root = $("news-root");
+    if (!root) return;
+    root.replaceChildren();
+    LabIA.newsItems(data).forEach((item) => {
+      const link = document.createElement("a");
+      link.className = "tile news-card";
+      link.setAttribute("href", item.url);
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.append(el("h3", null, item.title));
+      link.append(el("p", null, item.description));
+      link.append(el("span", "go", "打开 ↗"));
+      root.append(link);
+    });
+  }
+
   function renderPlugins(projects) {
     const root = $("plugins-root");
     root.replaceChildren();
@@ -121,6 +138,11 @@
     });
   }
 
+  function showNewsError() {
+    const node = $("news-root");
+    if (node) node.append(el("p", "status", "新闻列表没有载入。请用网站方式打开本页。"));
+  }
+
   const toggle = $("nav-toggle");
   const links = $("site-nav");
   if (toggle && links) {
@@ -148,4 +170,12 @@
       renderPlay(works);
     })
     .catch(showLoadError);
+
+  fetch("data/news.json")
+    .then((res) => {
+      if (!res.ok) throw new Error(String(res.status));
+      return res.json();
+    })
+    .then(renderNews)
+    .catch(showNewsError);
 })();

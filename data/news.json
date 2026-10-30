@@ -1,0 +1,79 @@
+{
+  "sites": [
+    {
+      "title": "Reddit",
+      "url": "https://www.reddit.com",
+      "description": "社区讨论与趋势信号。"
+    },
+    {
+      "title": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "description": "极客与创业技术头条。"
+    },
+    {
+      "title": "Product Hunt",
+      "url": "https://www.producthunt.com",
+      "description": "新产品发布与发现。"
+    },
+    {
+      "title": "GitHub Trending",
+      "url": "https://github.com/trending",
+      "description": "开源仓库热度榜。"
+    },
+    {
+      "title": "Indie Hackers",
+      "url": "https://www.indiehackers.com",
+      "description": "独立开发者故事与变现。"
+    },
+    {
+      "title": "Substack",
+      "url": "https://substack.com",
+      "description": "长文 newsletter 信息源。"
+    },
+    {
+      "title": "LinkedIn",
+      "url": "https://www.linkedin.com",
+      "description": "职业圈动态与行业讨论。"
+    },
+    {
+      "title": "Threads",
+      "url": "https://www.threads.com",
+      "description": "轻量公开短帖流。"
+    },
+    {
+      "title": "Telegram",
+      "url": "https://telegram.org",
+      "description": "频道/群组信息聚合入口。"
+    },
+    {
+      "title": "arXiv",
+      "url": "https://arxiv.org",
+      "description": "预印本论文。"
+    },
+    {
+      "title": "Google Scholar",
+      "url": "https://scholar.google.com",
+      "description": "学术检索。"
+    },
+    {
+      "title": "Lobsters",
+      "url": "https://lobste.rs",
+      "description": "技术社区精选链接。"
+    },
+    {
+      "title": "DEV Community",
+      "url": "https://dev.to",
+      "description": "开发者文章与教程。"
+    },
+    {
+      "title": "Stack Overflow",
+      "url": "https://stackoverflow.com",
+      "description": "编程问答。"
+    },
+    {
+      "title": "Medium",
+      "url": "https://medium.com",
+      "description": "泛主题长文。"
+    }
+  ]
+}

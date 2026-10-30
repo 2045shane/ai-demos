@@ -74,18 +74,20 @@ const lab = read("assets/lab.js");
 const catalog = JSON.parse(read("data/catalog.json"));
 const LabIA = loadLabIA();
 
-const navLabels = ["插件", "教学", "好玩", "关于", "联系我"];
-const navHrefs = ["#plugins", "#learn", "#play", "#about", "#contact"];
+const navLabels = ["插件", "教学", "好玩", "新闻", "关于", "联系我"];
+const navHrefs = ["#plugins", "#learn", "#play", "#news", "#about", "#contact"];
 const navBlock = html.slice(html.indexOf('id="site-nav"'), html.indexOf("</ul>"));
 const nav = [...navBlock.matchAll(/<a href="(#[^"]+)">([^<]+)<\/a>/g)];
-check(nav.map((item) => item[2]).join("|") === navLabels.join("|"), "nav labels must be 插件 · 教学 · 好玩 · 关于 · 联系我");
+check(nav.map((item) => item[2]).join("|") === navLabels.join("|"), "nav labels must be 插件 · 教学 · 好玩 · 新闻 · 关于 · 联系我");
 check(nav.map((item) => item[1]).join("|") === navHrefs.join("|"), "nav hrefs must match section ids in order");
-check(nav.length === 5, "nav has exactly five links");
+check(nav.length === 6, "nav has exactly six links");
+check(nav.findIndex((item) => item[2] === "好玩") + 1 === nav.findIndex((item) => item[2] === "新闻"), "新闻 sits after 好玩");
+check(nav.findIndex((item) => item[2] === "新闻") + 1 === nav.findIndex((item) => item[2] === "关于"), "新闻 sits before 关于");
 check(html.includes("<span>SHANE</span><span class=\"slash\">/</span><span>AI LAB</span>"), "brand stays SHANE / AI LAB");
 check(html.includes('href="#plugins">跳到插件'), "skip link targets plugins");
 
 const ids = sectionIds(html);
-check(ids.join("|") === "plugins|learn|play|about|contact", "section order is plugins, learn, play, about, contact");
+check(ids.join("|") === "plugins|learn|play|news|about|contact", "section order is plugins, learn, play, news, about, contact");
 check(html.indexOf('class="hero') !== -1 && html.indexOf('class="hero') < html.indexOf('id="plugins"'), "hero stays before plugins");
 check(!/id="(latest|explore|projects)"/.test(html), "no standalone Latest, Explore, or Projects section");
 const headings = [...html.matchAll(/<h2\b[^>]*>([^<]+)<\/h2>/g)].map((match) => match[1]);
@@ -100,14 +102,17 @@ const hero = [
 hero.forEach((line) => check(html.includes(line), "hero copy locked: " + line));
 
 check(html.indexOf('src="assets/ia.js"') !== -1 && html.indexOf('src="assets/ia.js"') < html.indexOf('src="assets/lab.js"'), "ia.js loads before lab.js");
-["learnWorks", "playWorks", "pickFeatured", "pluginOffersDownload", "compareNewest"].forEach((name) => {
+["learnWorks", "playWorks", "pickFeatured", "pluginOffersDownload", "compareNewest", "newsItems"].forEach((name) => {
   check(lab.includes("LabIA." + name), "lab.js uses LabIA." + name);
 });
 check(!/latest-root|explore-root|projects-root|#latest|#explore/.test(lab + html), "renderer has no legacy latest/explore/projects roots");
 
 check(css.includes("--bg: #07080d"), "dark background token stays");
 check(!/data-theme|theme-toggle|prefers-color-scheme/.test(html + css + lab), "no theme toggle");
-check(!/mailto:|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(html + lab + JSON.stringify(catalog)), "no email address");
+const news = JSON.parse(read("data/news.json"));
+const bundled = html + lab + JSON.stringify(catalog) + JSON.stringify(news);
+check(!/mailto:|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(bundled), "no email address");
+check(!/api[_-]?key|secret|password|BEGIN PRIVATE/i.test(JSON.stringify(news)), "news file has no secrets");
 check(!html.includes("邮箱"), "contact copy has no email label");
 check(html.includes("小红书私信「珊哥爱读书」"), "contact keeps Xiaohongshu");
 check(html.includes("https://github.com/2045shane"), "contact keeps GitHub");
@@ -155,6 +160,42 @@ check(LabIA.learnWorks(fixture).length === 3, "missing section defaults to learn
 check(LabIA.playWorks(fixture).length === 1, "only section play goes to play");
 check(LabIA.pickFeatured([]) === null, "no learn works means no featured card");
 
+const expectedNews = [
+  ["Reddit", "https://www.reddit.com", "社区讨论与趋势信号。"],
+  ["Hacker News", "https://news.ycombinator.com", "极客与创业技术头条。"],
+  ["Product Hunt", "https://www.producthunt.com", "新产品发布与发现。"],
+  ["GitHub Trending", "https://github.com/trending", "开源仓库热度榜。"],
+  ["Indie Hackers", "https://www.indiehackers.com", "独立开发者故事与变现。"],
+  ["Substack", "https://substack.com", "长文 newsletter 信息源。"],
+  ["LinkedIn", "https://www.linkedin.com", "职业圈动态与行业讨论。"],
+  ["Threads", "https://www.threads.com", "轻量公开短帖流。"],
+  ["Telegram", "https://telegram.org", "频道/群组信息聚合入口。"],
+  ["arXiv", "https://arxiv.org", "预印本论文。"],
+  ["Google Scholar", "https://scholar.google.com", "学术检索。"],
+  ["Lobsters", "https://lobste.rs", "技术社区精选链接。"],
+  ["DEV Community", "https://dev.to", "开发者文章与教程。"],
+  ["Stack Overflow", "https://stackoverflow.com", "编程问答。"],
+  ["Medium", "https://medium.com", "泛主题长文。"]
+];
+const sites = LabIA.newsItems(news);
+check(Array.isArray(news.sites) && news.sites.length === 15, "news.json lists exactly 15 sites");
+check(sites.length === 15, "LabIA.newsItems keeps all 15 sites");
+expectedNews.forEach((row, index) => {
+  const item = sites[index];
+  check(item && item.title === row[0], "news title " + (index + 1) + " is " + row[0]);
+  check(item && item.url === row[1], "news url " + (index + 1) + " is " + row[1]);
+  check(item && item.description === row[2], "news blurb " + (index + 1) + " stays the Chinese line");
+  check(item && /[\u4e00-\u9fff]/.test(item.description), "news blurb " + (index + 1) + " contains Chinese");
+});
+check(!/huggingface\.co|huggingface/i.test(JSON.stringify(news) + html), "news does not add Hugging Face");
+check(LabIA.newsItems({ sites: [{ title: "跳过", url: "", description: "无地址" }, expectedNews[0] && { title: expectedNews[0][0], url: expectedNews[0][1], description: expectedNews[0][2] }] }).length === 1, "newsItems drops entries missing a url");
+check(html.includes('id="news"') && html.includes('id="news-root"'), "homepage has a #news section and list root");
+const newsFn = lab.slice(lab.indexOf("function renderNews"), lab.indexOf("function renderPlugins"));
+check(newsFn.includes('link.target = "_blank"'), "news cards open in a new tab");
+check(newsFn.includes('link.rel = "noopener noreferrer"'), "news cards set noopener");
+check(newsFn.includes('link.setAttribute("href", item.url)'), "news cards keep the exact listed url");
+check(lab.includes('fetch("data/news.json")'), "lab.js loads data/news.json");
+
 catalog.works.concat(catalog.projects).forEach((item) => {
   if (!/小红书/.test(item.title || "") || !/课/.test(item.title || "")) return;
   const real = typeof item.url === "string" && (item.url.startsWith("https://") || item.url.startsWith("http://") || fs.existsSync(path.join(root, item.url)));
@@ -171,7 +212,8 @@ const spot = [
   "/job-countdown/",
   "/temperature.html",
   "/agent.html",
-  "/Prompt%20Injection%20Mini-Experiment.html"
+  "/Prompt%20Injection%20Mini-Experiment.html",
+  "/data/news.json"
 ];
 LabIA.learnWorks(catalog.works).forEach((item) => {
   const urlPath = item.url.endsWith("/") ? "/" + item.url : "/" + item.url;
