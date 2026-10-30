@@ -26,12 +26,23 @@
     return Boolean(item && item.url);
   }
 
+  function newsItems(data) {
+    const list = Array.isArray(data) ? data : (data && Array.isArray(data.sites) ? data.sites : []);
+    return list.filter((item) => {
+      return item
+        && typeof item.title === "string" && item.title
+        && typeof item.url === "string" && item.url
+        && typeof item.description === "string" && item.description;
+    });
+  }
+
   root.LabIA = {
     compareNewest,
     isPlay,
     learnWorks,
     playWorks,
     pickFeatured,
-    pluginOffersDownload
+    pluginOffersDownload,
+    newsItems
   };
 })(globalThis);
