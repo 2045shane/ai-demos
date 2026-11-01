@@ -11,9 +11,9 @@
 | 文件 | 说明 |
 |---|---|
 | `index.html` | 首页：深色个人 AI 实验室。顺序是 Hero、插件、教学、好玩、新闻、关于、联系我。作品来自 `data/catalog.json`，新闻外链来自 `data/news.json` |
-| `docs/FEATURE-MAP.md` | 导航、区块、catalog 字段、新闻 15 站和渲染路径 |
+| `docs/FEATURE-MAP.md` | 导航、区块、catalog 字段、新闻 16 站和渲染路径 |
 | `data/catalog.json` | 作品数据：`title`、`description`、`date`、`category`、`url`、`type`、`cover`；实验可加 `section`（`learn` 或 `play`，缺省是 `learn`） |
-| `data/news.json` | 新闻区 15 个外站：`title`、`url`、一句中文 `description`。地址不要改，也不要自行加入 Hugging Face |
+| `data/news.json` | 新闻区 16 个外站：`title`、`url`、一句中文 `description`。地址不要改。Hugging Face 固定为 `https://huggingface.co/` |
 | `tests/ia-check.mjs` | `npm test`：锁住导航文案、区块顺序、learn/play 划分和旧页可访问 |
 | `assets/lab.css`、`assets/lab.js` | 首页样式和渲染（只给首页用） |
 | `job-countdown/` | 职业倒计时试水页 |
@@ -82,8 +82,8 @@ sed -i '' 's#2045shane.github.io/ai-demos/#2045shane.github.io/新仓库名/#g' 
 4. 小红书互动课：只有已经有站内页或真实外链时才加进 `works`。没有就不要造一条空卡。
 5. 在 `sitemap.xml` 加一行 `<url>`，`loc` 用 `https://2045shane.github.io/ai-demos/` 加上相对路径，`lastmod` 用发布日。首页改了的话，也把首页那条 `lastmod` 改成当天。
 6. `robots.txt` 已经指向这份 sitemap，一般不用改。首页 `<link rel="canonical">` 仍是 `https://2045shane.github.io/ai-demos/`。推到 `main` 后，IndexNow 工作流会把这次改过的 HTML（含首页）提交给 Bing 等，不用另配密钥。
-7. 新闻站点只改 `data/news.json`。现在固定 15 条，URL 和中文说明以 `docs/FEATURE-MAP.md` 为准。不要加 Hugging Face，除非 Shane 明确要求。
-8. 改完跑 `npm test`。它检查导航六项、区块顺序、新闻 15 条 URL，以及旧实验页还在。
+7. 新闻站点只改 `data/news.json`。现在固定 16 条，URL 和中文说明以 `docs/FEATURE-MAP.md` 为准。Hugging Face 用 `https://huggingface.co/`。
+8. 改完跑 `npm test`。它检查导航六项、区块顺序、新闻 16 条 URL，以及旧实验页还在。
 
 教学顶部最多 1 张大卡：从 `section` 不是 `play` 的实验里，按日期从新到旧取第一条；同一天按 `url` 倒序。这张卡仍留在自己的分类里。没有单独的 Latest 整段。
 

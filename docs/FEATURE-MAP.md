@@ -15,7 +15,7 @@ U0 已关（Shane → 黑执事，按默认）。v6 规则继续有效，本 cut
 2. 小红书互动课：只有仓库里已经有站内页，或 catalog 里已经有真实外链时，才放进教学。本仓库两者都没有，不造卡。
 3. 导航左侧保持 `SHANE / AI LAB`。右侧为「插件 · 教学 · 好玩 · 新闻 · 关于 · 联系我」。
 4. 未公开「AI研究」留在插件区：`url` 为空，只显示联系我，不提供下载。
-5. 新闻名单里不要加 Hugging Face，除非 Shane 另开口。
+5. Hugging Face 已按 Shane 的要求放进新闻，地址固定 `https://huggingface.co/`，排在原来 15 站后面。
 
 ## 导航
 
@@ -46,7 +46,7 @@ U0 已关（Shane → 黑执事，按默认）。v6 规则继续有效，本 cut
 | 2 | 插件 | `#plugins` | `projects[]`，catalog 顺序 |
 | 3 | 教学 | `#learn` | `works[]` 里教学实验；顶部 1 张 Featured；下面按四分类 |
 | 4 | 好玩 | `#play` | `works[]` 里 `section: "play"` |
-| 5 | 新闻 | `#news` | `data/news.json` 的 `sites[]`，固定 15 条，顺序不改 |
+| 5 | 新闻 | `#news` | `data/news.json` 的 `sites[]`，固定 16 条，顺序不改 |
 | 6 | 关于 | `#about` | 静态能力向短文 |
 | 7 | 联系我 | `#contact` | 小红书「珊哥爱读书」+ `https://github.com/2045shane`；无邮箱 |
 
@@ -83,7 +83,7 @@ U0 已关（Shane → 黑执事，按默认）。v6 规则继续有效，本 cut
 | 字段 | 作用 |
 | --- | --- |
 | `title` | 站点名，卡片标题 |
-| `url` | 外链，必须是下面这 15 条，不要改主机名或路径 |
+| `url` | 外链，必须是下面这 16 条，不要改主机名或路径 |
 | `description` | 一句中文说明 |
 
 | 顺序 | 标题 | url | 说明 |
@@ -103,6 +103,7 @@ U0 已关（Shane → 黑执事，按默认）。v6 规则继续有效，本 cut
 | 13 | DEV Community | `https://dev.to` | 开发者文章与教程。 |
 | 14 | Stack Overflow | `https://stackoverflow.com` | 编程问答。 |
 | 15 | Medium | `https://medium.com` | 泛主题长文。 |
+| 16 | Hugging Face | `https://huggingface.co/` | 模型、数据集与论文的 AI 枢纽。 |
 
 整张卡片是外链：`target="_blank"`，`rel="noopener noreferrer"`。无登录、无付费墙、无密钥。
 
@@ -126,4 +127,4 @@ U0 已关（Shane → 黑执事，按默认）。v6 规则继续有效，本 cut
 
 `npm test` 跑 `tests/ia-check.mjs`。`.github/workflows/ia-check.yml` 在 pull request 和推送到 `main` 时跑同一条命令。
 
-检查锁住：导航六项文案和锚点（新闻在好玩与关于之间）、区块 id 顺序、Hero 四句、没有独立 Latest、Featured 不抽好玩、职业倒计时的 `section` 与 URL、五张插件卡和四条 GitHub 地址、「AI研究」无下载、联系我在关于之后且无邮箱、无主题切换、教学页和旧跳转页返回 200、新闻正好 15 条且 URL 与中文说明与上表一致、新闻卡新标签打开并带 `noopener`、新闻名单不含 Hugging Face。
+检查锁住：导航六项文案和锚点（新闻在好玩与关于之间）、区块 id 顺序、Hero 四句、没有独立 Latest、Featured 不抽好玩、职业倒计时的 `section` 与 URL、五张插件卡和四条 GitHub 地址、「AI研究」无下载、联系我在关于之后且无邮箱、无主题切换、教学页和旧跳转页返回 200、新闻正好 16 条且 URL 与中文说明与上表一致（含 Hugging Face `https://huggingface.co/`）、新闻卡新标签打开并带 `noopener`。

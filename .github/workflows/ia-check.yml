@@ -1,6 +1,6 @@
 name: Home IA
 
-# Hard check for homepage section order, six nav labels, and the 15 news URLs.
+# Hard check for homepage section order, six nav labels, and the 16 news URLs.
 # See docs/FEATURE-MAP.md and tests/ia-check.mjs.
 
 on:

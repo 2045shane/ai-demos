@@ -74,6 +74,11 @@
       "title": "Medium",
       "url": "https://medium.com",
       "description": "泛主题长文。"
+    },
+    {
+      "title": "Hugging Face",
+      "url": "https://huggingface.co/",
+      "description": "模型、数据集与论文的 AI 枢纽。"
     }
   ]
 }

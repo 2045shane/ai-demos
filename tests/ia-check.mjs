@@ -175,11 +175,12 @@ const expectedNews = [
   ["Lobsters", "https://lobste.rs", "技术社区精选链接。"],
   ["DEV Community", "https://dev.to", "开发者文章与教程。"],
   ["Stack Overflow", "https://stackoverflow.com", "编程问答。"],
-  ["Medium", "https://medium.com", "泛主题长文。"]
+  ["Medium", "https://medium.com", "泛主题长文。"],
+  ["Hugging Face", "https://huggingface.co/", "模型、数据集与论文的 AI 枢纽。"]
 ];
 const sites = LabIA.newsItems(news);
-check(Array.isArray(news.sites) && news.sites.length === 15, "news.json lists exactly 15 sites");
-check(sites.length === 15, "LabIA.newsItems keeps all 15 sites");
+check(Array.isArray(news.sites) && news.sites.length === 16, "news.json lists exactly 16 sites");
+check(sites.length === 16, "LabIA.newsItems keeps all 16 sites");
 expectedNews.forEach((row, index) => {
   const item = sites[index];
   check(item && item.title === row[0], "news title " + (index + 1) + " is " + row[0]);
@@ -187,7 +188,9 @@ expectedNews.forEach((row, index) => {
   check(item && item.description === row[2], "news blurb " + (index + 1) + " stays the Chinese line");
   check(item && /[\u4e00-\u9fff]/.test(item.description), "news blurb " + (index + 1) + " contains Chinese");
 });
-check(!/huggingface\.co|huggingface/i.test(JSON.stringify(news) + html), "news does not add Hugging Face");
+const huggingFace = sites.find((item) => item.title === "Hugging Face");
+check(huggingFace && huggingFace.url === "https://huggingface.co/", "Hugging Face uses the official site url");
+check(huggingFace && /[\u4e00-\u9fff]/.test(huggingFace.description), "Hugging Face card has a Chinese blurb");
 check(LabIA.newsItems({ sites: [{ title: "跳过", url: "", description: "无地址" }, expectedNews[0] && { title: expectedNews[0][0], url: expectedNews[0][1], description: expectedNews[0][2] }] }).length === 1, "newsItems drops entries missing a url");
 check(html.includes('id="news"') && html.includes('id="news-root"'), "homepage has a #news section and list root");
 const newsFn = lab.slice(lab.indexOf("function renderNews"), lab.indexOf("function renderPlugins"));
