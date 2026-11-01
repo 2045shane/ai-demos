@@ -190,6 +190,8 @@ a { color: inherit; }
 
 .tile:hover { border-color: rgba(126, 231, 245, 0.45); }
 
+.news-card h3 { margin-top: 0; }
+
 .tile-feature:hover { border-color: transparent; }
 
 .cover {
