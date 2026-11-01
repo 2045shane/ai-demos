@@ -147,6 +147,50 @@
       "label": "独立项目 · 浏览器扩展"
     },
     {
+      "title": "假职位检测",
+      "description": "Chrome 扩展：在 LinkedIn 职位页标出可能的假职位/幽灵职位信号；本地每日免费 3 次；无 API key。安装与用法见 GitHub README。",
+      "date": "2026-11-01",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/ghost-job-detect",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "Gmail 附件打包",
+      "description": "Chrome 扩展：把当前 Gmail 邮件的附件打成 zip 下载；本地每日免费 3 次；无 API key。安装与用法见 GitHub README。",
+      "date": "2026-11-01",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/gmail-attach-zip",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "日历批量改日程",
+      "description": "Chrome 扩展：在 Google Calendar 里批量改选中日程的时间；本地每日免费 3 次；无 API key。安装与用法见 GitHub README。",
+      "date": "2026-11-01",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/gcal-bulk-move",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "酒店降价追踪",
+      "description": "Chrome 扩展：在 Booking 酒店页加入追踪并检查是否降价；本地每日免费 3 次；无 API key。请自行核对取消政策与价格条款。安装与用法见 GitHub README。",
+      "date": "2026-11-01",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/hotel-price-watch",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
       "title": "AI研究",
       "description": "浏览器扩展。这一版还没有公开，页面上不提供下载。",
       "date": "",
