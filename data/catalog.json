@@ -191,6 +191,39 @@
       "label": "独立项目 · 浏览器扩展"
     },
     {
+      "title": "价格换算成工作小时数",
+      "description": "Chrome 扩展：在商品页把价格换成大约多少小时工作；本地每日免费 3 次；无 API key。不做汇率换算，请核对原价。安装与用法见 GitHub README。",
+      "date": "2026-11-02",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/work-hours-price",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "面料成分检查",
+      "description": "Chrome 扩展：在 Amazon 商品页读面料成分，标出合成纤维占比和分数；本地每日免费 3 次；无 API key。评分为启发式，请核对原文。安装与用法见 GitHub README。",
+      "date": "2026-11-02",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/fabric-score-check",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "招聘页查询签证担保",
+      "description": "Chrome 扩展：在 LinkedIn 职位页查询雇主名称是否在英国 Skilled Worker 担保名册；本地每日免费 3 次；无 API key。这不是雇主评分。安装与用法见 GitHub README。",
+      "date": "2026-11-02",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/employer-ratings-job",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
       "title": "AI研究",
       "description": "浏览器扩展。这一版还没有公开，页面上不提供下载。",
       "date": "",
