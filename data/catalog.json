@@ -224,6 +224,50 @@
       "label": "独立项目 · 浏览器扩展"
     },
     {
+      "title": "Vinted 卖家工作台",
+      "description": "Chrome 扩展：读取已登录 Vinted 的衣柜，预览百分比或固定金额改价后逐条写回，并导出 UTF-8 CSV；本地每日成功改价 25 件、CSV 100 行，不索取密码也不上传 cookie。",
+      "date": "2026-11-06",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/vinted-seller-workbench",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "房产工具",
+      "description": "Chrome 扩展：导出 Rightmove 当前可见房源为 CSV（本地每日最多 20 行），汇总 Zillow 页上已标明成交的对比，并在 homedetails 显示打包的 HUD FY2027 小区域公平市场租金；无网络请求，不作估价。",
+      "date": "2026-11-06",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/property-listing-tools",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "能否投递",
+      "description": "Chrome 扩展：在 LinkedIn 与 Indeed 职位页对照设置里的所在国家，把当前正文判成可投递、限地区（不含你所在地区）或无法判定，并附匹配证据和独立时区提示；本地每日免费 3 次，无网络请求。",
+      "date": "2026-11-06",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/remote-from",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
+      "title": "PHI Mask 本地脱敏",
+      "description": "Chrome 扩展：在本地按类型替换粘贴文本中的姓名、出生日期、SSN、病历号、邮箱、电话、地址和日期（含中文姓名、病历号与大陆手机号），显示计数并可复制；每天免费 3 次，不上传，需人工复核。",
+      "date": "2026-11-06",
+      "category": "独立项目",
+      "url": "https://github.com/2045shane/phi-mask",
+      "type": "project",
+      "cover": "plug",
+      "external": true,
+      "label": "独立项目 · 浏览器扩展"
+    },
+    {
       "title": "AI研究",
       "description": "浏览器扩展。这一版还没有公开，页面上不提供下载。",
       "date": "",
