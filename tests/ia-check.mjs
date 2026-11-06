@@ -129,10 +129,17 @@ const pluginUrls = {
   "酒店降价追踪": "https://github.com/2045shane/hotel-price-watch",
   "价格换算成工作小时数": "https://github.com/2045shane/work-hours-price",
   "面料成分检查": "https://github.com/2045shane/fabric-score-check",
-  "招聘页查询签证担保": "https://github.com/2045shane/employer-ratings-job"
+  "招聘页查询签证担保": "https://github.com/2045shane/employer-ratings-job",
+  "Vinted 卖家工作台": "https://github.com/2045shane/vinted-seller-workbench",
+  "房产工具": "https://github.com/2045shane/property-listing-tools",
+  "能否投递": "https://github.com/2045shane/remote-from",
+  "PHI Mask 本地脱敏": "https://github.com/2045shane/phi-mask"
 };
 const titles = catalog.projects.map((item) => item.title);
-check(titles.length === 12, "plugins list twelve cards");
+const githubLinks = catalog.projects.filter((item) => /^https:\/\/github\.com\/2045shane\//.test(item.url || ""));
+check(titles.length === 16, "plugins list sixteen cards");
+check(Object.keys(pluginUrls).length === 15, "plugins list fifteen GitHub links");
+check(githubLinks.length === 15, "catalog projects contain fifteen GitHub links");
 check(titles.at(-1) === "AI研究", "AI研究 stays last");
 let last = -1;
 Object.keys(pluginUrls).concat("AI研究").forEach((title) => {
