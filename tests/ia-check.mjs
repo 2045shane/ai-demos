@@ -122,9 +122,18 @@ const pluginUrls = {
   "GEO 检查器": "https://github.com/2045shane/geo-checker",
   "YouTube 公开评论导出": "https://github.com/2045shane/social-comments-export",
   "网页表格导出": "https://github.com/2045shane/web-table-export",
-  "长页存档": "https://github.com/2045shane/longpage-archive"
+  "长页存档": "https://github.com/2045shane/longpage-archive",
+  "假职位检测": "https://github.com/2045shane/ghost-job-detect",
+  "Gmail 附件打包": "https://github.com/2045shane/gmail-attach-zip",
+  "日历批量改日程": "https://github.com/2045shane/gcal-bulk-move",
+  "酒店降价追踪": "https://github.com/2045shane/hotel-price-watch",
+  "价格换算成工作小时数": "https://github.com/2045shane/work-hours-price",
+  "面料成分检查": "https://github.com/2045shane/fabric-score-check",
+  "招聘页查询签证担保": "https://github.com/2045shane/employer-ratings-job"
 };
 const titles = catalog.projects.map((item) => item.title);
+check(titles.length === 12, "plugins list twelve cards");
+check(titles.at(-1) === "AI研究", "AI研究 stays last");
 let last = -1;
 Object.keys(pluginUrls).concat("AI研究").forEach((title) => {
   const index = titles.indexOf(title);

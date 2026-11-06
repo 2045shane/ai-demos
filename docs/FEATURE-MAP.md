@@ -72,6 +72,13 @@ U0 已关（Shane → 黑执事，按默认）。v6 规则继续有效，本 cut
 | YouTube 公开评论导出 | `https://github.com/2045shane/social-comments-export` |
 | 网页表格导出 | `https://github.com/2045shane/web-table-export` |
 | 长页存档 | `https://github.com/2045shane/longpage-archive` |
+| 假职位检测 | `https://github.com/2045shane/ghost-job-detect` |
+| Gmail 附件打包 | `https://github.com/2045shane/gmail-attach-zip` |
+| 日历批量改日程 | `https://github.com/2045shane/gcal-bulk-move` |
+| 酒店降价追踪 | `https://github.com/2045shane/hotel-price-watch` |
+| 价格换算成工作小时数 | `https://github.com/2045shane/work-hours-price` |
+| 面料成分检查 | `https://github.com/2045shane/fabric-score-check` |
+| 招聘页查询签证担保 | `https://github.com/2045shane/employer-ratings-job` |
 | AI研究 | `url` 为空；`contact` 为小红书私信「珊哥爱读书」 |
 
 已有 GitHub 地址不改。公开卡新标签打开。`url` 为空的卡不渲染外链，也不提供下载。
@@ -127,4 +134,4 @@ U0 已关（Shane → 黑执事，按默认）。v6 规则继续有效，本 cut
 
 `npm test` 跑 `tests/ia-check.mjs`。`.github/workflows/ia-check.yml` 在 pull request 和推送到 `main` 时跑同一条命令。
 
-检查锁住：导航六项文案和锚点（新闻在好玩与关于之间）、区块 id 顺序、Hero 四句、没有独立 Latest、Featured 不抽好玩、职业倒计时的 `section` 与 URL、五张插件卡和四条 GitHub 地址、「AI研究」无下载、联系我在关于之后且无邮箱、无主题切换、教学页和旧跳转页返回 200、新闻正好 16 条且 URL 与中文说明与上表一致（含 Hugging Face `https://huggingface.co/`）、新闻卡新标签打开并带 `noopener`。
+检查锁住：导航六项文案和锚点（新闻在好玩与关于之间）、区块 id 顺序、Hero 四句、没有独立 Latest、Featured 不抽好玩、职业倒计时的 `section` 与 URL、十二张插件卡和十一条 GitHub 地址、「AI研究」无下载且排在插件表最后、联系我在关于之后且无邮箱、无主题切换、教学页和旧跳转页返回 200、新闻正好 16 条且 URL 与中文说明与上表一致（含 Hugging Face `https://huggingface.co/`）、新闻卡新标签打开并带 `noopener`。
